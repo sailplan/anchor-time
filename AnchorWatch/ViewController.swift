@@ -9,22 +9,33 @@
 import UIKit
 import MapKit
 
-let anchorCoordinate = CLLocationCoordinate2DMake(45.23230, -85.08603)
+class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+    let locationManager = CLLocationManager()
+    
+    var anchorCoordinate: CLLocationCoordinate2D?
+    var lastLocation: CLLocation?
 
-class ViewController: UIViewController, MKMapViewDelegate {
     //MARK: Properties and Outlets
     @IBOutlet weak var mapView: MKMapView!
 
-    
-    //MARK: - Annotations
-    
-    //MARK: - Overlays
-    
-    //MARK: - Map setup
-    func resetRegion(){
-        let region = MKCoordinateRegionMakeWithDistance(anchorCoordinate, 1000, 1000)
-        mapView.setRegion(region, animated: true)
+    func dropAnchor(coordinate: CLLocationCoordinate2D) {
+        anchorCoordinate = coordinate
+        mapView.addAnnotation(AnchorLocation(position: coordinate))
+        mapView.add(MKCircle(center: coordinate, radius: 200))
     }
+    
+    func setLocation(location: CLLocation) {
+        if (lastLocation != nil) {
+            mapView.setCenter(location.coordinate, animated: true)
+        } else {
+            let region = MKCoordinateRegionMakeWithDistance(location.coordinate, 500, 500)
+            mapView.setRegion(region, animated: false)
+            dropAnchor(coordinate: location.coordinate)
+        }
+        lastLocation = location
+    }
+    
+    //MARK: - MapKit
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var view : MKPinAnnotationView
@@ -36,15 +47,49 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
         return view
     }
-
-    //Mark: Life cycle
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay.isKind(of: MKCircle.self) {
+            let circleRenderer = MKCircleRenderer(overlay: overlay)
+            circleRenderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
+            circleRenderer.strokeColor = UIColor.blue
+            circleRenderer.lineWidth = 1
+            return circleRenderer
+        }
+        return MKOverlayRenderer(overlay: overlay)
+    }
+    
+    //MARK: - Core Location
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        mapView.showsUserLocation = (status == .authorizedAlways)
+    }
+    
+    func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
+        setLocation(location: locations.last!)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        if let error = error as? CLError, error.code == .denied {
+            // Location updates are not authorized.
+            manager.stopUpdatingLocation()
+            return
+        }
+        // TODO: Notify the user of any errors.
+    }
+    
+    //MARK: Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        resetRegion()
         mapView.delegate = self
-        mapView.addAnnotation(AnchorLocation(position: anchorCoordinate))
-        mapView.add(MKCircle(center: anchorCoordinate, radius: 1000))
+        mapView.showsScale = true
+        mapView.showsCompass = true
+        
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {
