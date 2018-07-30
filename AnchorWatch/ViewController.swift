@@ -17,20 +17,19 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
 
     //MARK: Properties and Outlets
     @IBOutlet weak var mapView: MKMapView!
-
-    func dropAnchor(coordinate: CLLocationCoordinate2D) {
-        anchorCoordinate = coordinate
-        mapView.addAnnotation(AnchorLocation(position: coordinate))
-        mapView.add(MKCircle(center: coordinate, radius: 200))
+    
+    @IBAction func dropAnchor(_ sender: Any) {
+        anchorCoordinate = lastLocation!.coordinate
+        mapView.addAnnotation(AnchorLocation(position: anchorCoordinate!))
+        mapView.add(MKCircle(center: anchorCoordinate!, radius: 200))
     }
     
     func setLocation(location: CLLocation) {
-        if (lastLocation != nil) {
-            mapView.setCenter(location.coordinate, animated: true)
-        } else {
+        if (lastLocation == nil) {
             let region = MKCoordinateRegionMakeWithDistance(location.coordinate, 500, 500)
             mapView.setRegion(region, animated: false)
-            dropAnchor(coordinate: location.coordinate)
+        } else if(anchorCoordinate == nil) {
+            mapView.setCenter(location.coordinate, animated: true)
         }
         lastLocation = location
     }
