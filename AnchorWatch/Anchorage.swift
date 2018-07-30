@@ -2,17 +2,27 @@ import MapKit
 
 class Anchorage: NSObject {
     let coordinate: CLLocationCoordinate2D
-    let circle: MKCircle
+    var radius: Double = 0
+    var isSet: Bool = false
+    
+    var circle: MKCircle {
+        get {
+            return MKCircle(center: coordinate, radius: radius)
+        }
+    }
     
     var region: MKCoordinateRegion {
         get {
-            let distance = (circle.radius * 2) * 1.2
+            let distance = (radius * 2) * 1.2
             return MKCoordinateRegionMakeWithDistance(coordinate, distance, distance)
         }
     }
     
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
-        self.circle = MKCircle(center: coordinate, radius: 200)
+    }
+    
+    func set() {
+        self.isSet = true
     }
 }

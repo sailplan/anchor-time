@@ -15,30 +15,62 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     var lastLocation: CLLocation?
     
     var anchorage: Anchorage?
+    var circle: MKCircle?
 
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var dropAnchorButton: UIButton!
     
     //MARK: - App logic
     
     @IBAction func dropAnchor(_ sender: Any) {
-        let anchorage = Anchorage(coordinate: lastLocation!.coordinate)
+        if(anchorage == nil) {
+            let anchorage = Anchorage(coordinate: lastLocation!.coordinate)
 
-        // Add anchorage to the map
-        mapView.addAnnotation(AnchorLocation(position: anchorage.coordinate))
-        mapView.add(anchorage.circle)
+            // Add anchorage to the map
+            mapView.addAnnotation(AnchorLocation(position: anchorage.coordinate))
 
-        // Stop following user's current location
-        mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+            // Stop following user's current location
+            mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+            
+            self.anchorage = anchorage
+            
+            dropAnchorButton.setTitle("Set Anchor", for: .normal)
+            
+            renderCircle()
+        } else {
+            anchorage!.set()
+            dropAnchorButton.isHidden = true
+        }
+    }
+    
+    func renderCircle() {
+        if (circle != nil) {
+            mapView.remove(circle!)
+        }
         
+        circle = anchorage!.circle
+        mapView.add(circle!)
+
         // Center map on anchorage
-        mapView.setRegion(anchorage.region, animated: true)
-        
-        self.anchorage = anchorage
+        mapView.setRegion(anchorage!.region, animated: true)
     }
     
     func updateLocation(location: CLLocation) {
         lastLocation = location
+        
+        if(anchorage == nil) {
+            return
+        }
+        
+        if(anchorage!.isSet) {
+            // Track location
+        } else {
+            let from = CLLocation(latitude: anchorage!.coordinate.latitude, longitude: anchorage!.coordinate.longitude)
+            anchorage!.radius = location.distance(from: from)
+            
+            renderCircle()
+        }
     }
     
     //MARK: - MapKit
@@ -60,6 +92,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             circleRenderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
             circleRenderer.strokeColor = UIColor.blue
             circleRenderer.lineWidth = 1
+            
             return circleRenderer
         }
         return MKOverlayRenderer(overlay: overlay)
