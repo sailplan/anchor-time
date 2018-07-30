@@ -22,6 +22,11 @@ class Anchorage: NSObject {
         self.coordinate = coordinate
     }
     
+    func widen(_ location: CLLocation) {
+        let from = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        self.radius = max(radius, location.distance(from: from))
+    }
+    
     func set() {
         self.isSet = true
     }

@@ -66,9 +66,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         if(anchorage!.isSet) {
             // Track location
         } else {
-            let from = CLLocation(latitude: anchorage!.coordinate.latitude, longitude: anchorage!.coordinate.longitude)
-            anchorage!.radius = location.distance(from: from)
-            
+            anchorage!.widen(location)
             renderCircle()
         }
     }
