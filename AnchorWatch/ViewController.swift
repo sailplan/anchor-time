@@ -10,22 +10,31 @@ import UIKit
 import MapKit
 
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+    //MARK: - Properties
     let locationManager = CLLocationManager()
-    
-    var anchorCoordinate: CLLocationCoordinate2D?
     var lastLocation: CLLocation?
+    
+    var anchorage: Anchorage?
 
-    //MARK: Properties and Outlets
+    //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     
+    //MARK: - App logic
+    
     @IBAction func dropAnchor(_ sender: Any) {
-        anchorCoordinate = lastLocation!.coordinate
-        mapView.addAnnotation(AnchorLocation(position: anchorCoordinate!))
-        mapView.add(MKCircle(center: anchorCoordinate!, radius: 200))
+        let anchorage = Anchorage(coordinate: lastLocation!.coordinate)
+
+        // Add anchorage to the map
+        mapView.addAnnotation(AnchorLocation(position: anchorage.coordinate))
+        mapView.add(anchorage.circle)
+
+        // Stop following user's current location
         mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
         
-        let region = MKCoordinateRegionMakeWithDistance(anchorCoordinate!, 500, 500)
-        mapView.setRegion(region, animated: true)
+        // Center map on anchorage
+        mapView.setRegion(anchorage.region, animated: true)
+        
+        self.anchorage = anchorage
     }
     
     func updateLocation(location: CLLocation) {
@@ -75,7 +84,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // TODO: Notify the user of any errors.
     }
     
-    //MARK: Life cycle
+    //MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

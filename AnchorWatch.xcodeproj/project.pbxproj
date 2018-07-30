@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3BED15210EB5900069EE88 /* Anchorage.swift */; };
 		7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB70210DF3D700C97117 /* AppDelegate.swift */; };
 		7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB72210DF3D700C97117 /* ViewController.swift */; };
 		7EB6AB76210DF3D700C97117 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EB6AB74210DF3D700C97117 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E3BED15210EB5900069EE88 /* Anchorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
 		7EB6AB6D210DF3D700C97117 /* AnchorWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnchorWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EB6AB70210DF3D700C97117 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EB6AB72210DF3D700C97117 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			children = (
 				7EB6AB70210DF3D700C97117 /* AppDelegate.swift */,
 				7EB6AB72210DF3D700C97117 /* ViewController.swift */,
+				7E3BED15210EB5900069EE88 /* Anchorage.swift */,
 				7EB6ABA1210E05AD00C97117 /* AnchorLocation.swift */,
 				7EB6AB74210DF3D700C97117 /* Main.storyboard */,
 				7EB6AB77210DF3D800C97117 /* Assets.xcassets */,
@@ -278,6 +281,7 @@
 			files = (
 				7EB6ABA2210E05AD00C97117 /* AnchorLocation.swift in Sources */,
 				7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */,
+				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
