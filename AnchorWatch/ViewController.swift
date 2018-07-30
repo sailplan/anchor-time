@@ -22,15 +22,13 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         anchorCoordinate = lastLocation!.coordinate
         mapView.addAnnotation(AnchorLocation(position: anchorCoordinate!))
         mapView.add(MKCircle(center: anchorCoordinate!, radius: 200))
+        mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+        
+        let region = MKCoordinateRegionMakeWithDistance(anchorCoordinate!, 500, 500)
+        mapView.setRegion(region, animated: true)
     }
     
-    func setLocation(location: CLLocation) {
-        if (lastLocation == nil) {
-            let region = MKCoordinateRegionMakeWithDistance(location.coordinate, 500, 500)
-            mapView.setRegion(region, animated: false)
-        } else if(anchorCoordinate == nil) {
-            mapView.setCenter(location.coordinate, animated: true)
-        }
+    func updateLocation(location: CLLocation) {
         lastLocation = location
     }
     
@@ -65,7 +63,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
-        setLocation(location: locations.last!)
+        updateLocation(location: locations.last!)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -82,9 +80,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        mapView.showsScale = true
-        mapView.showsCompass = true
-        
+        mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
+
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self
