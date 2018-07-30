@@ -64,7 +64,11 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         }
         
         if(anchorage!.isSet) {
-            // Track location
+            // TODO: Track location
+
+            if(!anchorage!.contains(location)) {
+                showAlert(withTitle: "Dragging!", message: "OMG you're dragging!")
+            }
         } else {
             anchorage!.widen(location)
             renderCircle()
@@ -133,6 +137,12 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // Dispose of any resources that can be recreated.
     }
 
+    func showAlert(withTitle title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
     
 }
 

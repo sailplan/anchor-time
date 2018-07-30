@@ -18,16 +18,26 @@ class Anchorage: NSObject {
         }
     }
     
+    var fence: CLCircularRegion {
+        get {
+            return CLCircularRegion(center: coordinate, radius: radius, identifier: "anchorage")
+        }
+    }
+    
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
     }
     
     func widen(_ location: CLLocation) {
         let from = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        self.radius = max(radius, location.distance(from: from))
+        self.radius = max(radius, location.distance(from: from) + 1)
     }
     
     func set() {
         self.isSet = true
+    }
+    
+    func contains(_ location: CLLocation) -> Bool {
+        return fence.contains(location.coordinate)
     }
 }
