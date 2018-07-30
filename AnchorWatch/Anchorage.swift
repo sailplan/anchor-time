@@ -1,10 +1,10 @@
 import MapKit
 
-class Anchorage: NSObject {
+class Anchorage: NSObject, NSCoding {
     let coordinate: CLLocationCoordinate2D
     var radius: Double = 0
     var isSet: Bool = false
-    
+
     var circle: MKCircle {
         get {
             return MKCircle(center: coordinate, radius: radius)
@@ -20,24 +20,65 @@ class Anchorage: NSObject {
     
     var fence: CLCircularRegion {
         get {
-            return CLCircularRegion(center: coordinate, radius: radius, identifier: "anchorage")
+            let region = CLCircularRegion(center: coordinate, radius: radius, identifier: "anchorage")
+            region.notifyOnEntry = false
+            region.notifyOnExit = true
+            return region
+
         }
     }
     
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
+        super.init()
+        self.save()
     }
     
     func widen(_ location: CLLocation) {
         let from = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        self.radius = max(radius, location.distance(from: from) + 1)
+        radius = max(radius, location.distance(from: from) + 1)
+        save()
     }
     
     func set() {
         self.isSet = true
+        save()
     }
     
     func contains(_ location: CLLocation) -> Bool {
         return fence.contains(location.coordinate)
+    }
+    
+    // MARK: NSCoding
+    
+    required init?(coder decoder: NSCoder) {
+        let latitude = decoder.decodeDouble(forKey: "latitude")
+        let longitude = decoder.decodeDouble(forKey: "longitude")
+        coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        radius = decoder.decodeDouble(forKey: "radius")
+        isSet = decoder.decodeBool(forKey: "isSet")
+    }
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(coordinate.latitude, forKey: "latitude")
+        coder.encode(coordinate.longitude, forKey: "longitude")
+        coder.encode(radius, forKey: "radius")
+        
+        coder.encode(isSet, forKey: "isSet")
+    }
+    
+    // Mark: Persistance
+    
+    func save() {
+        print("Saving", self)
+        let data = NSKeyedArchiver.archivedData(withRootObject: self)
+        print("Saving", data)
+        UserDefaults.standard.set(data, forKey: "anchorage")
+    }
+
+    class func find() -> Anchorage? {
+        guard let data = UserDefaults.standard.data(forKey: "anchorage") else { return nil }
+        guard let anchorage = NSKeyedUnarchiver.unarchiveObject(with: data) as? Anchorage else { return nil }
+        return anchorage
     }
 }

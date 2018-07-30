@@ -25,21 +25,43 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     @IBAction func dropAnchor(_ sender: Any) {
         if(anchorage == nil) {
-            let anchorage = Anchorage(coordinate: lastLocation!.coordinate)
-
-            // Add anchorage to the map
-            mapView.addAnnotation(AnchorLocation(position: anchorage.coordinate))
-
-            // Stop following user's current location
-            mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-            
-            self.anchorage = anchorage
-            
-            dropAnchorButton.setTitle("Set Anchor", for: .normal)
-            
-            renderCircle()
+            anchorage = Anchorage(coordinate: lastLocation!.coordinate)
+            renderAnchorage()
         } else {
-            anchorage!.set()
+            setAnchor()
+        }
+    }
+    
+    func setAnchor() {
+        guard let anchorage = self.anchorage else { return }
+        anchorage.set()
+        
+        let fence = anchorage.fence
+        if CLLocationManager.isMonitoringAvailable(for: fence.classForCoder) {
+            locationManager.startMonitoring(for: fence)
+            
+            print("Monitoring location!", fence)
+        } else {
+            print("Monitoring not available!")
+        }
+        
+        dropAnchorButton.isHidden = true
+    }
+    
+    func renderAnchorage() {
+        guard let anchorage = self.anchorage else { return }
+        
+        // Add anchorage to the map
+        mapView.addAnnotation(AnchorLocation(position: anchorage.coordinate))
+        
+        // Stop following user's current location
+        mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+        
+        dropAnchorButton.setTitle("Set Anchor", for: .normal)
+        
+        renderCircle()
+        
+        if(anchorage.isSet) {
             dropAnchorButton.isHidden = true
         }
     }
@@ -117,19 +139,29 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             return
         }
         // TODO: Notify the user of any errors.
+        print("Location Manager failed with the following error: \(error)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?,
+                         withError error: Error) {
+        print("Monitoring failed for region with identifier: \(region!.identifier)")
     }
     
     //MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         mapView.delegate = self
         mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
 
         locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
-        locationManager.delegate = self
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
+        
+        self.anchorage = Anchorage.find()
+        renderAnchorage()
     }
 
     override func didReceiveMemoryWarning() {

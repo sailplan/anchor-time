@@ -38,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		7E3BED15210EB5900069EE88 /* Anchorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
+		7E3BED1A210F553A0069EE88 /* AnchoringFromXcode.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AnchoringFromXcode.gpx; sourceTree = "<group>"; };
 		7EB6AB6D210DF3D700C97117 /* AnchorWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnchorWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EB6AB70210DF3D700C97117 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EB6AB72210DF3D700C97117 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 		7EB6AB84210DF3D800C97117 /* AnchorWatchTests */ = {
 			isa = PBXGroup;
 			children = (
+				7E3BED1A210F553A0069EE88 /* AnchoringFromXcode.gpx */,
 				7EB6AB85210DF3D800C97117 /* AnchorWatchTests.swift */,
 				7EB6AB87210DF3D800C97117 /* Info.plist */,
 			);
