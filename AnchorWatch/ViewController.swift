@@ -52,7 +52,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         guard let anchorage = self.anchorage else { return }
         
         // Add anchorage to the map
-        mapView.addAnnotation(AnchorLocation(position: anchorage.coordinate))
+        mapView.addAnnotation(anchorage)
         
         // Stop following user's current location
         mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
@@ -101,7 +101,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var view : MKPinAnnotationView
-        guard let annotation = annotation as? AnchorLocation else {return nil}
+        guard let annotation = annotation as? Anchorage else { return nil }
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: annotation.identifier) as? MKPinAnnotationView {
             view = dequeuedView
         } else { // make a new view

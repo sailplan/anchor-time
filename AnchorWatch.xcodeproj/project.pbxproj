@@ -16,7 +16,6 @@
 		7EB6AB86210DF3D800C97117 /* AnchorWatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB85210DF3D800C97117 /* AnchorWatchTests.swift */; };
 		7EB6AB91210DF3D800C97117 /* AnchorWatchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */; };
 		7EB6ABA0210DF3E700C97117 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB6AB9F210DF3E700C97117 /* MapKit.framework */; };
-		7EB6ABA2210E05AD00C97117 /* AnchorLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6ABA1210E05AD00C97117 /* AnchorLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +52,6 @@
 		7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorWatchUITests.swift; sourceTree = "<group>"; };
 		7EB6AB92210DF3D800C97117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EB6AB9F210DF3E700C97117 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		7EB6ABA1210E05AD00C97117 /* AnchorLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +107,6 @@
 				7EB6AB70210DF3D700C97117 /* AppDelegate.swift */,
 				7EB6AB72210DF3D700C97117 /* ViewController.swift */,
 				7E3BED15210EB5900069EE88 /* Anchorage.swift */,
-				7EB6ABA1210E05AD00C97117 /* AnchorLocation.swift */,
 				7EB6AB74210DF3D700C97117 /* Main.storyboard */,
 				7EB6AB77210DF3D800C97117 /* Assets.xcassets */,
 				7EB6AB79210DF3D800C97117 /* LaunchScreen.storyboard */,
@@ -281,7 +278,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EB6ABA2210E05AD00C97117 /* AnchorLocation.swift in Sources */,
 				7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */,
 				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,

@@ -1,9 +1,10 @@
 import MapKit
 
-class Anchorage: NSObject, NSCoding {
+class Anchorage: NSObject, NSCoding, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     var radius: Double = 0
     var isSet: Bool = false
+    let identifier = "anchorage"
 
     var circle: MKCircle {
         get {
