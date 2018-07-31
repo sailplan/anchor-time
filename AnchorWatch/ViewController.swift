@@ -151,10 +151,13 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: remove once UI exists for canceling anchorage
+        UserDefaults.standard.removeObject(forKey: "anchorage")
         
         mapView.delegate = self
         mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
-
+        
         locationManager.delegate = self
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
