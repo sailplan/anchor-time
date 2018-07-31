@@ -12,7 +12,6 @@ import MapKit
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     //MARK: - Properties
     let locationManager = CLLocationManager()
-    var lastLocation: CLLocation?
     
     var anchorage: Anchorage?
     var circle: MKCircle?
@@ -20,19 +19,19 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var dropAnchorButton: UIButton!
+    @IBOutlet weak var setAnchorButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     //MARK: - App logic
     
     @IBAction func dropAnchor(_ sender: Any) {
-        if(anchorage == nil) {
-            anchorage = Anchorage(coordinate: lastLocation!.coordinate)
-            renderAnchorage()
-        } else {
-            setAnchor()
-        }
+        guard let location = locationManager.location else { return }
+        anchorage = Anchorage(coordinate: location.coordinate)
+        renderAnchorage()
+        updateUI()
     }
     
-    func setAnchor() {
+    @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
         
@@ -45,7 +44,20 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             print("Monitoring not available!")
         }
         
-        dropAnchorButton.isHidden = true
+        updateUI()
+    }
+    
+    @IBAction func cancel(_ sender: Any) {
+        mapView.removeAnnotation(anchorage!)
+        
+        if(circle != nil) {
+            mapView.remove(circle!)
+        }
+    
+        self.anchorage = nil
+        self.circle = nil
+        
+        updateUI()
     }
     
     func renderAnchorage() {
@@ -57,13 +69,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // Stop following user's current location
         mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
         
-        dropAnchorButton.setTitle("Set Anchor", for: .normal)
-        
         renderCircle()
-        
-        if(anchorage.isSet) {
-            dropAnchorButton.isHidden = true
-        }
     }
     
     func renderCircle() {
@@ -79,22 +85,24 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     func updateLocation(location: CLLocation) {
-        lastLocation = location
-        
-        if(anchorage == nil) {
-            return
-        }
-        
-        if(anchorage!.isSet) {
+        guard let anchorage = self.anchorage else { return }
+
+        if(anchorage.isSet) {
             // TODO: Track location
 
-            if(!anchorage!.contains(location)) {
+            if(!anchorage.contains(location)) {
                 showAlert(withTitle: "Dragging!", message: "OMG you're dragging!")
             }
         } else {
-            anchorage!.widen(location)
+            anchorage.widen(location)
             renderCircle()
         }
+    }
+    
+    func updateUI() {
+        self.dropAnchorButton.isHidden = anchorage != nil
+        self.setAnchorButton.isHidden = anchorage != nil && anchorage!.isSet
+        self.cancelButton.isHidden = anchorage == nil
     }
     
     //MARK: - MapKit
@@ -152,9 +160,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: remove once UI exists for canceling anchorage
-        UserDefaults.standard.removeObject(forKey: "anchorage")
-        
         mapView.delegate = self
         mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
         
@@ -165,6 +170,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         self.anchorage = Anchorage.find()
         renderAnchorage()
+        updateUI()
     }
 
     override func didReceiveMemoryWarning() {
