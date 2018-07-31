@@ -53,6 +53,8 @@
 		7EB6AB92210DF3D800C97117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EB6AB9F210DF3E700C97117 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7ED7EC532110C68400C7ACC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		7ED7EC542110D50000C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; name = mockups.sketch; path = ../../../../Desktop/mockups.sketch; sourceTree = "<group>"; };
+		7ED7EC552110D50A00C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockups.sketch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		7EB6AB64210DF3D700C97117 = {
 			isa = PBXGroup;
 			children = (
+				7ED7EC572110D52E00C7ACC6 /* Assets */,
 				7ED7EC532110C68400C7ACC6 /* README.md */,
 				7EB6AB6F210DF3D700C97117 /* AnchorWatch */,
 				7EB6AB84210DF3D800C97117 /* AnchorWatchTests */,
@@ -139,9 +142,18 @@
 		7EB6AB9E210DF3E700C97117 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7ED7EC542110D50000C7ACC6 /* mockups.sketch */,
 				7EB6AB9F210DF3E700C97117 /* MapKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7ED7EC572110D52E00C7ACC6 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				7ED7EC552110D50A00C7ACC6 /* mockups.sketch */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
