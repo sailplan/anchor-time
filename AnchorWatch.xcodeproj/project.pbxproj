@@ -52,6 +52,7 @@
 		7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorWatchUITests.swift; sourceTree = "<group>"; };
 		7EB6AB92210DF3D800C97117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EB6AB9F210DF3E700C97117 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7ED7EC532110C68400C7ACC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +84,7 @@
 		7EB6AB64210DF3D700C97117 = {
 			isa = PBXGroup;
 			children = (
+				7ED7EC532110C68400C7ACC6 /* README.md */,
 				7EB6AB6F210DF3D700C97117 /* AnchorWatch */,
 				7EB6AB84210DF3D800C97117 /* AnchorWatchTests */,
 				7EB6AB8F210DF3D800C97117 /* AnchorWatchUITests */,
