@@ -11,24 +11,23 @@ import CoreLocation
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
 
     var window: UIWindow?
     let locationManager = CLLocationManager()
+    let notificationCenter = UNUserNotificationCenter.current()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         
-//        let options: UNAuthorizationOptions = [.badge, .sound, .alert]
-//        UNUserNotificationCenter.current()
-//            .requestAuthorization(options: options) { success, error in
-//                if let error = error {
-//                    print("Error: \(error)")
-//                }
-//        }
-        
+        notificationCenter.requestAuthorization(options: [.sound, .alert]) { success, error in
+                if let error = error {
+                    print("Error: \(error)")
+                }
+        }
+
         return true
     }
 
@@ -64,38 +63,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Show an alert if application is active
         if UIApplication.shared.applicationState == .active {
-            let alertController = UIAlertController(title: "iOScreator", message:
-                "Hello, world!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "Dragging", message:
+                message, preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
             
             window?.rootViewController?.present(alertController, animated: true, completion: nil)
-            
-//            window?.rootViewController?.showAlert(withTitle: nil, message: message)
         } else {
             // Otherwise present a local notification
             let notificationContent = UNMutableNotificationContent()
             notificationContent.body = message
             notificationContent.sound = UNNotificationSound.default()
-            notificationContent.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             let request = UNNotificationRequest(identifier: "location_change",
                                                 content: notificationContent,
                                                 trigger: trigger)
-            UNUserNotificationCenter.current().add(request) { error in
+            notificationCenter.add(request) { error in
                 if let error = error {
                     print("Error: \(error)")
                 }
             }
-        }
-
-    }
-}
-
-extension AppDelegate: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("Monitoring: entered region", region)
-        if region is CLCircularRegion {
-            handleEvent(for: region)
         }
     }
     

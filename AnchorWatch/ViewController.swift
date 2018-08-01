@@ -36,9 +36,12 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         anchorage.set()
         
         let fence = anchorage.fence
-        if CLLocationManager.isMonitoringAvailable(for: fence.classForCoder) {
+        
+        let authorized = CLLocationManager.authorizationStatus() == .authorizedAlways
+        let available = CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self)
+        
+        if authorized && available {
             locationManager.startMonitoring(for: fence)
-            
             print("Monitoring location!", fence)
         } else {
             print("Monitoring not available!")
@@ -53,7 +56,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         if(circle != nil) {
             mapView.remove(circle!)
         }
-    
+        
+        locationManager.stopMonitoring(for: anchorage!.fence)
+
         self.anchorage = nil
         self.circle = nil
         
@@ -86,11 +91,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
 
         if(anchorage.isSet) {
             // TODO: Track location
-
-            if(!anchorage.contains(location)) {
-                showAlert(withTitle: "Dragging!", message: "OMG you're dragging!")
-                cancel("")
-            }
         } else {
             anchorage.widen(location)
             renderCircle()
@@ -153,7 +153,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             return
         }
         // TODO: Notify the user of any errors.
-        print("Location Manager failed with the following error: \(error)")
+        print("Location Manager failed with the following error:", error, error.localizedDescription)
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?,
