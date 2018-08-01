@@ -4,27 +4,27 @@
         <name>Waiting</name>
         <time>2018-07-29T01:42:00Z</time>
     </wpt>
-
+    
     <wpt lat="45.23218" lon="-85.08600">
         <name>Anchor down</name>
         <time>2018-07-29T01:42:05Z</time>
     </wpt>
-
+    
     <wpt lat="45.23212" lon="-85.08574">
         <name>Waiting</name>
         <time>2018-07-29T01:42:15Z</time>
     </wpt>
-
+    
     <wpt lat="45.23212" lon="-85.08574">
         <name>Anchor set</name>
         <time>2018-07-29T01:42:20Z</time>
     </wpt>
-
+    
     <wpt lat="45.23217" lon="-85.08620">
         <name>Drift in</name>
         <time>2018-07-29T01:42:30Z</time>
     </wpt>
-
+    
     <wpt lat="45.23231" lon="-85.08650">
         <name>Drag!</name>
         <time>2018-07-29T01:45:00Z</time>
