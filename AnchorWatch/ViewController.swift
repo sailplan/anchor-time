@@ -66,9 +66,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // Add anchorage to the map
         mapView.addAnnotation(anchorage)
         
-        // Stop following user's current location
-        mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-        
         renderCircle()
     }
     
@@ -92,6 +89,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
 
             if(!anchorage.contains(location)) {
                 showAlert(withTitle: "Dragging!", message: "OMG you're dragging!")
+                cancel("")
             }
         } else {
             anchorage.widen(location)
@@ -103,6 +101,14 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         self.dropAnchorButton.isHidden = anchorage != nil
         self.setAnchorButton.isHidden = anchorage != nil && anchorage!.isSet
         self.cancelButton.isHidden = anchorage == nil
+        
+        if(anchorage == nil) {
+            // Stop following user's current location
+            mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
+        } else {
+            // Stop following user's current location
+            mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+        }
     }
     
     //MARK: - MapKit
@@ -161,7 +167,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         super.viewDidLoad()
 
         mapView.delegate = self
-        mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
         
         locationManager.delegate = self
         locationManager.distanceFilter = kCLDistanceFilterNone
