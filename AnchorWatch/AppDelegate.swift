@@ -11,16 +11,12 @@ import CoreLocation
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let locationManager = CLLocationManager()
     let notificationCenter = UNUserNotificationCenter.current()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
         
         notificationCenter.requestAuthorization(options: [.sound, .alert]) { success, error in
                 if let error = error {
@@ -54,41 +50,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-
-    
-    // MARK: - Core Location
-    func handleEvent(for region: CLRegion!) {
-        let message = "OMG you're dragging anchor!"
-
-        // Show an alert if application is active
-        if UIApplication.shared.applicationState == .active {
-            let alertController = UIAlertController(title: "Dragging", message:
-                message, preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-            
-            window?.rootViewController?.present(alertController, animated: true, completion: nil)
-        } else {
-            // Otherwise present a local notification
-            let notificationContent = UNMutableNotificationContent()
-            notificationContent.body = message
-            notificationContent.sound = UNNotificationSound.default()
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-            let request = UNNotificationRequest(identifier: "location_change",
-                                                content: notificationContent,
-                                                trigger: trigger)
-            notificationCenter.add(request) { error in
-                if let error = error {
-                    print("Error: \(error)")
-                }
-            }
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        print("Monitoring: exited region", region)
-        if region is CLCircularRegion {
-            handleEvent(for: region)
-        }
     }
 }

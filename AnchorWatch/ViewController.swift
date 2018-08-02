@@ -8,10 +8,12 @@
 
 import UIKit
 import MapKit
+import UserNotifications
 
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     //MARK: - Properties
     let locationManager = CLLocationManager()
+    let notificationCenter = UNUserNotificationCenter.current()
     
     var anchorage: Anchorage?
     var circle: MKCircle?
@@ -43,6 +45,28 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         if authorized && available {
             locationManager.startMonitoring(for: fence)
             print("Monitoring location!", fence)
+            
+            let notificationContent = UNMutableNotificationContent()
+            notificationContent.body = "OMG you're dragging anchor!"
+            
+            if #available(iOS 12.0, *) {
+                notificationContent.sound = UNNotificationSound.defaultCriticalSound(withAudioVolume: 1.0)
+            } else {
+                notificationContent.sound = UNNotificationSound.default()
+            }
+            
+            let trigger = UNLocationNotificationTrigger(region: fence, repeats: true)
+
+            let request = UNNotificationRequest(identifier: "dragging",
+                                                content: notificationContent,
+                                                trigger: trigger)
+            
+            notificationCenter.add(request) { error in
+                if let error = error {
+                    print("Error: \(error)")
+                }
+            }
+
         } else {
             print("Monitoring not available!")
         }
@@ -58,6 +82,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         }
         
         locationManager.stopMonitoring(for: anchorage!.fence)
+        notificationCenter.removeAllPendingNotificationRequests()
 
         self.anchorage = nil
         self.circle = nil
