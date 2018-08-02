@@ -130,9 +130,11 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         if(anchorage == nil) {
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
+            mapView.isZoomEnabled = true
         } else {
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+            mapView.isZoomEnabled = true
         }
     }
     
