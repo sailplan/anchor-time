@@ -2,7 +2,7 @@ import MapKit
 
 class Anchorage: NSObject, NSCoding, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
-    var radius: Double = 0
+    var radius: CLLocationDistance = 0
     var isSet: Bool = false
     let identifier = "anchorage"
 
@@ -36,11 +36,15 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     }
     
     func widen(_ location: CLLocation) {
-        let from = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        radius = max(radius, location.distance(from: from) + 1)
+        radius = max(radius, distanceTo(location))
         save()
     }
     
+    func distanceTo(_ location: CLLocation) -> CLLocationDistance {
+        let from = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        return location.distance(from: from)
+    }
+
     func set() {
         self.isSet = true
         save()
