@@ -15,7 +15,7 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     var region: MKCoordinateRegion {
         get {
             let distance = (radius * 2) * 1.2
-            return MKCoordinateRegionMakeWithDistance(coordinate, distance, distance)
+            return MKCoordinateRegion.init(center: coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
         }
     }
     

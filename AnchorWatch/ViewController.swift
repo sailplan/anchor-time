@@ -52,7 +52,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             if #available(iOS 12.0, *) {
                 notificationContent.sound = UNNotificationSound.defaultCriticalSound(withAudioVolume: 1.0)
             } else {
-                notificationContent.sound = UNNotificationSound.default()
+                notificationContent.sound = UNNotificationSound.default
             }
             
             let trigger = UNLocationNotificationTrigger(region: fence, repeats: true)
@@ -78,7 +78,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         mapView.removeAnnotation(anchorage!)
         
         if(circle != nil) {
-            mapView.remove(circle!)
+            mapView.removeOverlay(circle!)
         }
         
         locationManager.stopMonitoring(for: anchorage!.fence)
@@ -101,11 +101,11 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     func renderCircle() {
         if (circle != nil) {
-            mapView.remove(circle!)
+            mapView.removeOverlay(circle!)
         }
         
         circle = anchorage!.circle
-        mapView.add(circle!)
+        mapView.addOverlay(circle!)
 
         // Center map on anchorage
         mapView.setRegion(anchorage!.region, animated: true)
