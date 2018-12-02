@@ -22,10 +22,9 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     var fence: CLCircularRegion {
         get {
             let region = CLCircularRegion(center: coordinate, radius: radius, identifier: "anchorage")
-            region.notifyOnEntry = false
+            region.notifyOnEntry = true
             region.notifyOnExit = true
             return region
-
         }
     }
     
@@ -76,12 +75,10 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     
     func save() {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        print("Saving", data)
         UserDefaults.standard.set(data, forKey: "anchorage")
     }
 
     func clear() {
-        print("Clearing")
         UserDefaults.standard.removeObject(forKey: "anchorage")
     }
 
