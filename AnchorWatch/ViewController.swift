@@ -75,13 +75,17 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     @IBAction func cancel(_ sender: Any) {
-        mapView.removeAnnotation(anchorage!)
+        guard let anchorage = self.anchorage else { return }
+
+        anchorage.clear()
+
+        mapView.removeAnnotation(anchorage)
         
         if(circle != nil) {
             mapView.removeOverlay(circle!)
         }
         
-        locationManager.stopMonitoring(for: anchorage!.fence)
+        locationManager.stopMonitoring(for: anchorage.fence)
         notificationCenter.removeAllPendingNotificationRequests()
 
         self.anchorage = nil

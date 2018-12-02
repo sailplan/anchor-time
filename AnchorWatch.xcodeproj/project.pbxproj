@@ -17,7 +17,6 @@
 		7EB6AB86210DF3D800C97117 /* AnchorWatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB85210DF3D800C97117 /* AnchorWatchTests.swift */; };
 		7EB6AB91210DF3D800C97117 /* AnchorWatchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */; };
 		7EB6ABA0210DF3E700C97117 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB6AB9F210DF3E700C97117 /* MapKit.framework */; };
-		7EFE18F221B38F9A0028F432 /* DropAnchorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFE18F121B38F9A0028F432 /* DropAnchorButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +57,6 @@
 		7ED7EC532110C68400C7ACC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7ED7EC542110D50000C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; name = mockups.sketch; path = ../../../../Desktop/mockups.sketch; sourceTree = "<group>"; };
 		7ED7EC552110D50A00C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockups.sketch; sourceTree = "<group>"; };
-		7EFE18F121B38F9A0028F432 /* DropAnchorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropAnchorButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +119,6 @@
 				7EB6AB77210DF3D800C97117 /* Assets.xcassets */,
 				7EB6AB79210DF3D800C97117 /* LaunchScreen.storyboard */,
 				7EB6AB7C210DF3D800C97117 /* Info.plist */,
-				7EFE18F121B38F9A0028F432 /* DropAnchorButton.swift */,
 			);
 			path = AnchorWatch;
 			sourceTree = "<group>";
@@ -303,7 +300,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */,
-				7EFE18F221B38F9A0028F432 /* DropAnchorButton.swift in Sources */,
 				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,
 			);

@@ -75,10 +75,14 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     // Mark: Persistance
     
     func save() {
-        print("Saving", self)
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
         print("Saving", data)
         UserDefaults.standard.set(data, forKey: "anchorage")
+    }
+
+    func clear() {
+        print("Clearing")
+        UserDefaults.standard.removeObject(forKey: "anchorage")
     }
 
     class func find() -> Anchorage? {
