@@ -20,7 +20,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
 
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var dropAnchorButton: UIButton!
+    @IBOutlet weak var dropAnchorButton: UIView!
     @IBOutlet weak var setAnchorButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     
@@ -124,7 +124,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     func updateUI() {
         self.dropAnchorButton.isHidden = anchorage != nil
-        self.setAnchorButton.isHidden = anchorage != nil && anchorage!.isSet
+        self.setAnchorButton.isHidden = anchorage == nil || anchorage!.isSet
         self.cancelButton.isHidden = anchorage == nil
         
         if(anchorage == nil) {

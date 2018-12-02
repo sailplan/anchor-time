@@ -21,6 +21,57 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" scrollEnabled="NO" rotateEnabled="NO" showsUserLocation="YES" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YKc-kX-KOK">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Pv-9Z-FpY">
+                                <rect key="frame" x="87.5" y="268.5" width="200" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgX-DD-04f">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="50"/>
+                                        <color key="backgroundColor" red="0.1647058824" green="0.67843137249999996" blue="0.52156862749999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="DK9-f2-bik"/>
+                                            <constraint firstAttribute="height" constant="50" id="YzW-tp-9zW"/>
+                                        </constraints>
+                                        <state key="normal" title="Drop Anchor">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="dropAnchor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WFH-cL-d7G"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="disclosure" translatesAutoresizingMaskIntoConstraints="NO" id="5i3-gN-aiB">
+                                        <rect key="frame" x="164" y="15" width="20" height="20"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="cio-WK-qhQ"/>
+                                            <constraint firstAttribute="width" constant="20" id="hfQ-aW-UBG"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="anchor" translatesAutoresizingMaskIntoConstraints="NO" id="P73-Sh-IqE">
+                                        <rect key="frame" x="16" y="15" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="SA5-5A-6JM"/>
+                                            <constraint firstAttribute="height" constant="20" id="SL4-Py-xAc"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="jgX-DD-04f" secondAttribute="trailing" id="1GM-Fb-bXc"/>
+                                    <constraint firstItem="P73-Sh-IqE" firstAttribute="leading" secondItem="jgX-DD-04f" secondAttribute="leading" constant="16" id="9Bd-pi-bpx"/>
+                                    <constraint firstItem="5i3-gN-aiB" firstAttribute="trailing" secondItem="jgX-DD-04f" secondAttribute="trailing" constant="-16" id="J1b-8B-Cr0"/>
+                                    <constraint firstItem="jgX-DD-04f" firstAttribute="top" secondItem="1Pv-9Z-FpY" secondAttribute="top" id="Jfa-wE-ZNk"/>
+                                    <constraint firstItem="jgX-DD-04f" firstAttribute="leading" secondItem="1Pv-9Z-FpY" secondAttribute="leading" id="Lh9-ZB-pub"/>
+                                    <constraint firstItem="5i3-gN-aiB" firstAttribute="centerY" secondItem="jgX-DD-04f" secondAttribute="centerY" id="UlQ-En-KwQ"/>
+                                    <constraint firstItem="P73-Sh-IqE" firstAttribute="centerY" secondItem="jgX-DD-04f" secondAttribute="centerY" id="h2l-XB-PmD"/>
+                                    <constraint firstAttribute="bottom" secondItem="jgX-DD-04f" secondAttribute="bottom" id="tbW-nf-hm5"/>
+                                </constraints>
+                            </view>
                             <button hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ver-wi-Qtm">
                                 <rect key="frame" x="16" y="597" width="343" height="50"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -40,25 +91,6 @@
                                     <action selector="setAnchor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mFg-lR-v3L"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgX-DD-04f">
-                                <rect key="frame" x="16" y="597" width="343" height="50"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="YzW-tp-9zW"/>
-                                </constraints>
-                                <state key="normal" title="Drop Anchor">
-                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="25"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="dropAnchor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pXk-3U-6SA"/>
-                                </connections>
-                            </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xXE-QV-BIO">
                                 <rect key="frame" x="329" y="40" width="30" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -75,15 +107,15 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="xXE-QV-BIO" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="0J4-G6-Wlx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="jgX-DD-04f" secondAttribute="bottom" constant="20" id="GP4-Oz-DF1"/>
+                            <constraint firstItem="YKc-kX-KOK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6Q7-Sw-bjl"/>
+                            <constraint firstItem="1Pv-9Z-FpY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-40" id="8Ph-hn-lkF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YKc-kX-KOK" secondAttribute="trailing" id="Lki-tI-YNy"/>
                             <constraint firstItem="Ver-wi-Qtm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Tnj-Rf-y3K"/>
-                            <constraint firstItem="jgX-DD-04f" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="U4B-Op-PNL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xXE-QV-BIO" secondAttribute="trailing" constant="16" id="V5P-Yk-m1x"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jgX-DD-04f" secondAttribute="trailing" constant="16" id="Ye4-EQ-z6v"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ver-wi-Qtm" secondAttribute="trailing" constant="16" id="ZXL-LS-1Iu"/>
                             <constraint firstAttribute="bottom" secondItem="YKc-kX-KOK" secondAttribute="bottom" id="bU1-aL-JU4"/>
                             <constraint firstItem="YKc-kX-KOK" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="dLh-4S-HNu"/>
+                            <constraint firstItem="1Pv-9Z-FpY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dol-P9-tla"/>
                             <constraint firstItem="YKc-kX-KOK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="xkH-oO-S3F"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ver-wi-Qtm" secondAttribute="bottom" constant="20" id="zWU-V3-MqG"/>
                         </constraints>
@@ -91,13 +123,18 @@
                     </view>
                     <connections>
                         <outlet property="cancelButton" destination="xXE-QV-BIO" id="nDt-Sn-Aeh"/>
-                        <outlet property="dropAnchorButton" destination="jgX-DD-04f" id="lto-Df-3vC"/>
+                        <outlet property="dropAnchorButton" destination="1Pv-9Z-FpY" id="EsD-bb-8Ld"/>
                         <outlet property="mapView" destination="YKc-kX-KOK" id="d2M-c2-yAy"/>
                         <outlet property="setAnchorButton" destination="Ver-wi-Qtm" id="RQf-Hb-sI9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="53.600000000000001" y="27.436281859070466"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="anchor" width="300" height="300"/>
+        <image name="disclosure" width="30" height="30"/>
+    </resources>
 </document>
