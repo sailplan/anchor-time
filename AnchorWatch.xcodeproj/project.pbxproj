@@ -38,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		7E3BED15210EB5900069EE88 /* Anchorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
+		7E5611062121208D002D0361 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = LakeCharlevoix.gpx; sourceTree = "<group>"; };
 		7EB6AB6D210DF3D700C97117 /* AnchorWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnchorWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EB6AB70210DF3D700C97117 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 		7EB6AB64210DF3D700C97117 = {
 			isa = PBXGroup;
 			children = (
+				7E5611062121208D002D0361 /* TODO.md */,
 				7ED7EC572110D52E00C7ACC6 /* Assets */,
 				7ED7EC532110C68400C7ACC6 /* README.md */,
 				7EB6AB6F210DF3D700C97117 /* AnchorWatch */,
