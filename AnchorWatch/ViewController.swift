@@ -47,11 +47,9 @@ class ViewController: UIViewController {
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
 
-        self.anchorage = Anchorage.find()
+        self.anchorage = Anchorage.load()
         renderAnchorage()
         updateUI()
-
-
     }
 
     //MARK: - App logic
