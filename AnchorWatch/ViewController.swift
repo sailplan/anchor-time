@@ -100,6 +100,8 @@ class ViewController: UIViewController {
     @IBAction func cancel(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
 
+        locationManager.stopUpdatingLocation()
+
         // Remove map overlays
         mapView.removeAnnotation(anchorage)
         if(circle != nil) {
@@ -108,7 +110,9 @@ class ViewController: UIViewController {
         }
 
         // Stop location monitoring
-        locationManager.stopMonitoring(for: anchorage.fence)
+        locationManager.monitoredRegions.forEach {
+            locationManager.stopMonitoring(for: $0)
+        }
         notificationCenter.removeAllPendingNotificationRequests()
 
         // Reset Model
@@ -160,7 +164,7 @@ class ViewController: UIViewController {
         self.cancelButton.isHidden = anchorage == nil
         
         if(anchorage == nil) {
-            // Stop following user's current location
+            // Start following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
             mapView.isZoomEnabled = true
         } else {
@@ -198,10 +202,6 @@ extension ViewController: CLLocationManagerDelegate {
         }
         // TODO: Notify the user of any errors.
         print("Location Manager failed with the following error:", error, error.localizedDescription)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-        print("Determined state for region", state.rawValue, region)
     }
 }
 

@@ -35,7 +35,7 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     }
     
     func widen(_ location: CLLocation) {
-        radius = max(radius, distanceTo(location))
+        radius = max(radius, distanceTo(location) + location.horizontalAccuracy)
         save()
     }
     
