@@ -9,12 +9,14 @@
 import UIKit
 import MapKit
 import UserNotifications
+import AVFoundation
 
 class ViewController: UIViewController {
     //MARK: - Properties
     let locationManager = CLLocationManager()
     let notificationCenter = UNUserNotificationCenter.current()
-    
+    var alarm: AVAudioPlayer?
+
     var anchorage: Anchorage?
     var circle: MKCircle?
 
@@ -24,6 +26,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var setAnchorButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
 
+    var notificationContent: UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.body = "Your anchor is dragging!"
+        content.sound = UNNotificationSound.defaultCriticalSound(withAudioVolume: 1.0)
+        return content
+    }
 
     //MARK: - Life cycle
 
@@ -46,21 +54,32 @@ class ViewController: UIViewController {
         locationManager.activityType = .other
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.pausesLocationUpdatesAutomatically = false
+        locationManager.startUpdatingLocation()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
 
         self.anchorage = Anchorage.load()
         renderAnchorage()
         updateUI()
+        setupAlarm()
     }
 
     //MARK: - App logic
+
+    @objc func didChangeState(_ notification:Notification) {
+        print("State changed", anchorage!.state)
+    }
     
     @IBAction func dropAnchor(_ sender: Any) {
         guard let location = locationManager.location else { return }
         anchorage = Anchorage(coordinate: location.coordinate)
+
         print("Anchor dropped", anchorage!.coordinate)
+
         renderAnchorage()
         updateUI()
-        locationManager.startUpdatingLocation()
     }
     
     @IBAction func setAnchor(_ sender: Any) {
@@ -70,18 +89,13 @@ class ViewController: UIViewController {
 
         let fence = anchorage.fence
         locationManager.startMonitoring(for: fence)
+        createNotification(fence)
 
-        let notificationContent = UNMutableNotificationContent()
-        notificationContent.body = "OMG you're dragging anchor!"
+        updateUI()
+    }
 
-        if #available(iOS 12.0, *) {
-             UNNotificationSound.defaultCriticalSound(withAudioVolume: 1.0)
-        } else {
-            notificationContent.sound = UNNotificationSound.default
-        }
-
+    func createNotification(_ fence: CLCircularRegion) {
         let trigger = UNLocationNotificationTrigger(region: fence, repeats: true)
-
         let request = UNNotificationRequest(identifier: "dragging",
                                             content: notificationContent,
                                             trigger: trigger)
@@ -91,14 +105,21 @@ class ViewController: UIViewController {
                 print("Error: \(error)")
             }
         }
+    }
 
-        updateUI()
+    func createTestNotification() {
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        let request = UNNotificationRequest(identifier: "test", content: notificationContent, trigger: trigger)
+
+        notificationCenter.add(request) { error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
     }
 
     @IBAction func cancel(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
-
-        locationManager.stopUpdatingLocation()
 
         // Remove map overlays
         mapView.removeAnnotation(anchorage)
@@ -117,6 +138,7 @@ class ViewController: UIViewController {
         anchorage.clear()
         self.anchorage = nil
 
+        stopAlarm()
         updateUI()
     }
     
@@ -144,21 +166,30 @@ class ViewController: UIViewController {
     func updateLocation(location: CLLocation) {
         guard let anchorage = self.anchorage else { return }
 
-        if(anchorage.isSet) {
-            print("Current location", location)
-            print("Anchor radius", anchorage.radius)
-            print("Distance from anchor", anchorage.distanceTo(location))
-            locationManager.requestState(for: anchorage.fence)
-            // TODO: Track location
-        } else {
+        switch anchorage.state {
+        case .dropped:
             anchorage.widen(location)
             renderCircle()
+        case .set:
+            anchorage.check(location)
+            if anchorage.contains(location) {
+                print("it's cool", location)
+            } else {
+                activateAlarm()
+                print("Current location", location)
+                print("Anchor radius", anchorage.radius)
+                print("Distance from anchor", anchorage.distanceTo(location))
+            }
+            // TODO: Track location
+        case .dragging:
+            // TODO: already dragging
+            break
         }
     }
     
     func updateUI() {
         self.dropAnchorButton.isHidden = anchorage != nil
-        self.setAnchorButton.isHidden = anchorage == nil || anchorage!.isSet
+        self.setAnchorButton.isHidden = anchorage == nil || anchorage!.state != .dropped
         self.cancelButton.isHidden = anchorage == nil
         
         if(anchorage == nil) {
@@ -172,11 +203,29 @@ class ViewController: UIViewController {
         }
     }
 
+    func activateAlarm() {
+        alarm?.play()
+    }
+
+    func stopAlarm() {
+        alarm?.stop()
+    }
+
     func showAlert(withTitle title: String?, message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+
+    func setupAlarm() {
+        let fileURL = Bundle.main.path(forResource: "shipbell", ofType: "mp3")
+        do {
+            alarm = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: fileURL!))
+        } catch let error {
+            print("Can't play the audio file failed with an error \(error.localizedDescription)")
+        }
+        alarm?.numberOfLoops = -1
     }
     
 }

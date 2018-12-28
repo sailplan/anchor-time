@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3BED15210EB5900069EE88 /* Anchorage.swift */; };
+		7E53071321BBA6BE00C2EDF4 /* shipbell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7E53071221BBA6BE00C2EDF4 /* shipbell.mp3 */; };
+		7E53071521BBAC5600C2EDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */; };
+		7E64C58421C15F7900735B73 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64C58321C15F7900735B73 /* Notification.swift */; };
 		7E68E0B02112240600B44FFE /* LakeCharlevoix.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */; };
 		7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB70210DF3D700C97117 /* AppDelegate.swift */; };
 		7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB72210DF3D700C97117 /* ViewController.swift */; };
@@ -38,6 +41,9 @@
 
 /* Begin PBXFileReference section */
 		7E3BED15210EB5900069EE88 /* Anchorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
+		7E53071221BBA6BE00C2EDF4 /* shipbell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shipbell.mp3; sourceTree = "<group>"; };
+		7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		7E64C58321C15F7900735B73 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = LakeCharlevoix.gpx; sourceTree = "<group>"; };
 		7EB6AB6D210DF3D700C97117 /* AnchorWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnchorWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EB6AB70210DF3D700C97117 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E53071521BBAC5600C2EDF4 /* AVFoundation.framework in Frameworks */,
 				7EB6ABA0210DF3E700C97117 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,6 +124,7 @@
 				7EB6AB77210DF3D800C97117 /* Assets.xcassets */,
 				7EB6AB79210DF3D800C97117 /* LaunchScreen.storyboard */,
 				7EB6AB7C210DF3D800C97117 /* Info.plist */,
+				7E64C58321C15F7900735B73 /* Notification.swift */,
 			);
 			path = AnchorWatch;
 			sourceTree = "<group>";
@@ -143,6 +151,7 @@
 		7EB6AB9E210DF3E700C97117 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */,
 				7ED7EC542110D50000C7ACC6 /* mockups.sketch */,
 				7EB6AB9F210DF3E700C97117 /* MapKit.framework */,
 			);
@@ -152,6 +161,7 @@
 		7ED7EC572110D52E00C7ACC6 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				7E53071221BBA6BE00C2EDF4 /* shipbell.mp3 */,
 				7ED7EC552110D50A00C7ACC6 /* mockups.sketch */,
 			);
 			path = Assets;
@@ -273,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EB6AB7B210DF3D800C97117 /* LaunchScreen.storyboard in Resources */,
+				7E53071321BBA6BE00C2EDF4 /* shipbell.mp3 in Resources */,
 				7EB6AB78210DF3D800C97117 /* Assets.xcassets in Resources */,
 				7EB6AB76210DF3D700C97117 /* Main.storyboard in Resources */,
 			);
@@ -300,6 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E64C58421C15F7900735B73 /* Notification.swift in Sources */,
 				7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */,
 				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,
@@ -478,6 +490,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RYHA8UZK6Y;
 				INFOPLIST_FILE = AnchorWatch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -496,6 +509,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RYHA8UZK6Y;
 				INFOPLIST_FILE = AnchorWatch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         locationManager.requestAlwaysAuthorization()
         
         notificationCenter.delegate = self
-        notificationCenter.requestAuthorization(options: [.sound, .alert]) { success, error in
+        notificationCenter.requestAuthorization(options: [.sound, .alert, .criticalAlert]) { success, error in
                 if let error = error {
                     print("Error: \(error)")
                 }

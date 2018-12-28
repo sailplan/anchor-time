@@ -1,9 +1,15 @@
 import MapKit
 
 class Anchorage: NSObject, NSCoding, MKAnnotation {
+    enum State: Int {
+        case dropped
+        case set
+        case dragging
+    }
+
+    var state: State = .dropped
     let coordinate: CLLocationCoordinate2D
     var radius: CLLocationDistance = 0
-    var isSet: Bool = false
     let identifier = "anchorage"
 
     /// The location of the anchorage as a CLLocation
@@ -36,6 +42,12 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         self.save()
     }
 
+    func check(_ locationn: CLLocation) {
+        if !self.contains(location) {
+            self.state = .dragging
+        }
+    }
+
     /// Widen the anchorage radius to include the given location, including any GPS innacuracy
     func widen(_ location: CLLocation) {
         radius = max(radius, distanceTo(location) + location.horizontalAccuracy)
@@ -49,7 +61,7 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     /// Set the anchor and save the anchorage
     func set() {
-        self.isSet = true
+        self.state = .set
         save()
     }
 
@@ -65,15 +77,14 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         let longitude = decoder.decodeDouble(forKey: "longitude")
         coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         radius = decoder.decodeDouble(forKey: "radius")
-        isSet = decoder.decodeBool(forKey: "isSet")
+        state = State(rawValue: decoder.decodeInteger(forKey: "state"))!
     }
     
     func encode(with coder: NSCoder) {
         coder.encode(coordinate.latitude, forKey: "latitude")
         coder.encode(coordinate.longitude, forKey: "longitude")
         coder.encode(radius, forKey: "radius")
-        
-        coder.encode(isSet, forKey: "isSet")
+        coder.encode(state.rawValue, forKey: "state")
     }
     
     // Mark: Persistance

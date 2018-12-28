@@ -26,6 +26,7 @@
 	<string>Your location is required to monitor if your anchor is dragging.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
