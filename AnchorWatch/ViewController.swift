@@ -202,6 +202,17 @@ class ViewController: UIViewController {
     }
 
     func activateAlarm() {
+        let alertController = UIAlertController(
+            title: "Anchor dragging",
+            message: nil,
+            preferredStyle: .alert
+        )
+
+        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            self.stopAlarm()
+        })
+
+        present(alertController, animated: true)
         alarm?.play()
     }
 
