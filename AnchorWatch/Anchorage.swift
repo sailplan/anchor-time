@@ -7,7 +7,13 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         case dragging
     }
 
-    var state: State = .dropped
+    var state: State = .dropped {
+        didSet(oldValue) {
+            print("Changing anchorage state", oldValue, self.state)
+            NotificationCenter.default.post(name: .didChangeState, object: self)
+        }
+    }
+
     let coordinate: CLLocationCoordinate2D
     var radius: CLLocationDistance = 0
     let identifier = "anchorage"
@@ -42,8 +48,8 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         self.save()
     }
 
-    func check(_ locationn: CLLocation) {
-        if !self.contains(location) {
+    func check(_ location: CLLocation) {
+        if !contains(location) {
             self.state = .dragging
         }
     }

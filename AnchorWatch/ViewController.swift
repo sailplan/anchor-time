@@ -69,7 +69,13 @@ class ViewController: UIViewController {
     //MARK: - App logic
 
     @objc func didChangeState(_ notification:Notification) {
-        print("State changed", anchorage!.state)
+        switch anchorage!.state {
+        case .dragging:
+            activateAlarm()
+        default:
+            print("Anchorage state changed", anchorage!.state)
+            // no worries
+        }
     }
     
     @IBAction func dropAnchor(_ sender: Any) {
@@ -172,14 +178,6 @@ class ViewController: UIViewController {
             renderCircle()
         case .set:
             anchorage.check(location)
-            if anchorage.contains(location) {
-                print("it's cool", location)
-            } else {
-                activateAlarm()
-                print("Current location", location)
-                print("Anchor radius", anchorage.radius)
-                print("Distance from anchor", anchorage.distanceTo(location))
-            }
             // TODO: Track location
         case .dragging:
             // TODO: already dragging
