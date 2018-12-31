@@ -129,6 +129,7 @@ class ViewController: UIViewController {
 
         // Remove map overlays
         mapView.removeAnnotation(anchorage)
+        mapView.removeOverlays(mapView.overlays)
         if(circle != nil) {
             mapView.removeOverlay(circle!)
             self.circle = nil
@@ -171,6 +172,11 @@ class ViewController: UIViewController {
     
     func updateLocation(location: CLLocation) {
         guard let anchorage = self.anchorage else { return }
+
+        if let lastLocation = anchorage.locations.last {
+            let coordinates = [lastLocation.coordinate, location.coordinate]
+            mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
+        }
 
         switch anchorage.state {
         case .dropped:
@@ -275,14 +281,21 @@ extension ViewController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay.isKind(of: MKCircle.self) {
+        switch overlay {
+        case is MKCircle:
             let circleRenderer = MKCircleRenderer(overlay: overlay)
             circleRenderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
             circleRenderer.strokeColor = UIColor.blue
             circleRenderer.lineWidth = 1
 
             return circleRenderer
+        case let polyline as MKPolyline:
+            let renderer = MKPolylineRenderer(polyline: polyline)
+            renderer.strokeColor = .yellow
+            renderer.lineWidth = 1
+            return renderer
+        default:
+            return MKOverlayRenderer(overlay: overlay)
         }
-        return MKOverlayRenderer(overlay: overlay)
     }
 }

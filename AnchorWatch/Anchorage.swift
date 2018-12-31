@@ -16,6 +16,7 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     let coordinate: CLLocationCoordinate2D
     var radius: CLLocationDistance = 0
+    var locations: [CLLocation] = []
     let identifier = "anchorage"
 
     /// The location of the anchorage as a CLLocation
@@ -45,10 +46,12 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
         super.init()
+        self.track(location)
         self.save()
     }
 
     func check(_ location: CLLocation) {
+        track(location)
         if !contains(location) {
             self.state = .dragging
         }
@@ -56,8 +59,13 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     /// Widen the anchorage radius to include the given location, including any GPS innacuracy
     func widen(_ location: CLLocation) {
+        track(location)
         radius = max(radius, distanceTo(location) + location.horizontalAccuracy)
         save()
+    }
+
+    func track(_ location: CLLocation) {
+        self.locations.append(location)
     }
 
     /// Get the distance from the anchor to another location
