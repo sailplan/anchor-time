@@ -23,8 +23,8 @@ class ViewController: UIViewController {
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var dropAnchorButton: UIView!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var setAnchorDashboard: UIView!
+    @IBOutlet weak var droppedDashboard: UIView!
+    @IBOutlet weak var setDashboard: UIView!
     @IBOutlet weak var anchorPositionLabel: UILabel!
     @IBOutlet weak var anchorageRadiusLabel: UILabel!
     @IBOutlet weak var gpsAccuracyLabel: UILabel!
@@ -202,8 +202,8 @@ class ViewController: UIViewController {
 
     func updateUI() {
         self.dropAnchorButton.isHidden = anchorage != nil
-        self.setAnchorDashboard.isHidden = anchorage == nil || anchorage!.state != .dropped
-        self.cancelButton.isHidden = anchorage == nil
+        self.droppedDashboard.isHidden = anchorage == nil || anchorage!.state != .dropped
+        self.setDashboard.isHidden = anchorage == nil || anchorage!.state != .set
         
         if(anchorage == nil) {
             // Start following user's current location
