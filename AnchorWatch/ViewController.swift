@@ -23,8 +23,11 @@ class ViewController: UIViewController {
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var dropAnchorButton: UIView!
-    @IBOutlet weak var setAnchorButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var setAnchorDashboard: UIView!
+    @IBOutlet weak var anchorPositionLabel: UILabel!
+    @IBOutlet weak var anchorageRadiusLabel: UILabel!
+    @IBOutlet weak var gpsAccuracyLabel: UILabel!
 
     var notificationContent: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
@@ -159,15 +162,19 @@ class ViewController: UIViewController {
     }
     
     func renderCircle() {
+        guard let anchorage = self.anchorage else { return }
+
         if (circle != nil) {
             mapView.removeOverlay(circle!)
         }
         
-        circle = anchorage!.circle
+        circle = anchorage.circle
         mapView.addOverlay(circle!)
 
         // Center map on anchorage
-        mapView.setRegion(anchorage!.region, animated: true)
+        mapView.setRegion(anchorage.region, animated: true)
+        
+        anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
     }
     
     func updateLocation(location: CLLocation) {
@@ -177,6 +184,8 @@ class ViewController: UIViewController {
             let coordinates = [lastLocation.coordinate, location.coordinate]
             mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
         }
+        
+        gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
 
         switch anchorage.state {
         case .dropped:
@@ -190,10 +199,10 @@ class ViewController: UIViewController {
             break
         }
     }
-    
+
     func updateUI() {
         self.dropAnchorButton.isHidden = anchorage != nil
-        self.setAnchorButton.isHidden = anchorage == nil || anchorage!.state != .dropped
+        self.setAnchorDashboard.isHidden = anchorage == nil || anchorage!.state != .dropped
         self.cancelButton.isHidden = anchorage == nil
         
         if(anchorage == nil) {
@@ -204,7 +213,23 @@ class ViewController: UIViewController {
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
             mapView.isZoomEnabled = true
+            
+            anchorPositionLabel.text = coordinateString(anchorage!.coordinate)
         }
+    }
+    
+    func coordinateString(_ coordinate: CLLocationCoordinate2D) -> String {
+        let latDegrees = floor(abs(coordinate.latitude))
+        let latMinutes = 60 * (abs(coordinate.latitude) - latDegrees)
+        
+        let longDegrees = floor(abs(coordinate.longitude))
+        let longMinutes = 60 * (abs(coordinate.longitude) - longDegrees)
+        
+        return String(
+            format: "%d°%.3f'%@  %d°%.3f'%@",
+            Int(latDegrees), latMinutes, latDegrees >= 0 ? "N" : "S",
+            Int(longDegrees), longMinutes, longDegrees >= 0 ? "E" : "W"
+        )
     }
 
     func activateAlarm() {
@@ -270,12 +295,14 @@ extension ViewController: CLLocationManagerDelegate {
 //MARK: - MapKit
 extension ViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        var view : MKPinAnnotationView
+        var view : MKMarkerAnnotationView
         guard let annotation = annotation as? Anchorage else { return nil }
-        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: annotation.identifier) as? MKPinAnnotationView {
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: annotation.identifier) as? MKMarkerAnnotationView {
             view = dequeuedView
         } else { // make a new view
-            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: annotation.identifier)
+            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: annotation.identifier)
+            view.glyphImage = UIImage(named: "anchor")
+            view.markerTintColor = self.view.tintColor
         }
         return view
     }
