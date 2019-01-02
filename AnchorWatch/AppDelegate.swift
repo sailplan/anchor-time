@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  AnchorWatch
-//
-//  Created by Brandon Keepers on 7/29/18.
-//  Copyright © 2018 Brandon Keepers. All rights reserved.
-//
-
 import UIKit
 import CoreLocation
 import UserNotifications
