@@ -1,15 +1,8 @@
-//
-//  ViewController.swift
-//  AnchorWatch
-//
-//  Created by Brandon Keepers on 7/29/18.
-//  Copyright © 2018 Brandon Keepers. All rights reserved.
-//
-
 import UIKit
 import MapKit
 import UserNotifications
 import AVFoundation
+import MediaPlayer
 
 class ViewController: UIViewController {
     //MARK: - Properties
@@ -244,6 +237,8 @@ class ViewController: UIViewController {
         })
 
         present(alertController, animated: true)
+
+        MPVolumeView.setVolume(1.0)
         alarm?.play()
     }
 
@@ -259,6 +254,13 @@ class ViewController: UIViewController {
     }
 
     func setupAlarm() {
+        // Ensure audio plays even if in silent mode
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        } catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
+        
         let fileURL = Bundle.main.path(forResource: "shipbell", ofType: "mp3")
         do {
             alarm = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: fileURL!))
@@ -266,6 +268,7 @@ class ViewController: UIViewController {
             print("Can't play the audio file failed with an error \(error.localizedDescription)")
         }
         alarm?.numberOfLoops = -1
+        MPVolumeView.setVolume(1.0)
     }
     
 }
