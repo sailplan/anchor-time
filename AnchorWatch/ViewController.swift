@@ -261,7 +261,7 @@ class ViewController: UIViewController {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
         
-        let fileURL = Bundle.main.path(forResource: "shipbell", ofType: "mp3")
+        let fileURL = Bundle.main.path(forResource: "alarm", ofType: "mp3")
         do {
             alarm = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: fileURL!))
         } catch let error {
