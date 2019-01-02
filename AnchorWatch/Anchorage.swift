@@ -51,7 +51,6 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     }
 
     func check(_ location: CLLocation) {
-        track(location)
         if !contains(location) {
             self.state = .dragging
         }
@@ -59,7 +58,6 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     /// Widen the anchorage radius to include the given location, including any GPS innacuracy
     func widen(_ location: CLLocation) {
-        track(location)
         radius = max(radius, distanceTo(location) + location.horizontalAccuracy)
         save()
     }

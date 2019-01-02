@@ -179,6 +179,8 @@ class ViewController: UIViewController {
         }
         
         gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
+        
+        anchorage.track(location)
 
         switch anchorage.state {
         case .dropped:
@@ -205,7 +207,7 @@ class ViewController: UIViewController {
         } else {
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-            mapView.isZoomEnabled = true
+            mapView.isZoomEnabled = false
             
             anchorPositionLabel.text = coordinateString(anchorage!.coordinate)
         }
