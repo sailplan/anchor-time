@@ -59,7 +59,6 @@ class ViewController: UIViewController {
         self.anchorage = Anchorage.load()
         renderAnchorage()
         updateUI()
-        setupAlarm()
     }
 
     //MARK: - App logic
@@ -94,6 +93,7 @@ class ViewController: UIViewController {
         createNotification(fence)
 
         updateUI()
+        setupAlarm()
     }
 
     func createNotification(_ fence: CLCircularRegion) {
@@ -258,7 +258,7 @@ class ViewController: UIViewController {
     func setupAlarm() {
         // Ensure audio plays even if in silent mode
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.duckOthers, .defaultToSpeaker])
         } catch {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
