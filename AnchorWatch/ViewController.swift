@@ -39,19 +39,9 @@ class ViewController: UIViewController {
             return
         }
 
-        if CLLocationManager.authorizationStatus() != .authorizedAlways {
-            showAlert(withTitle:"Warning", message: "You must allow permission to always uswe location.")
-        }
-
         mapView.delegate = self
 
         locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
-        locationManager.activityType = .other
-        locationManager.distanceFilter = kCLDistanceFilterNone
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.startUpdatingLocation()
 
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
@@ -278,22 +268,11 @@ class ViewController: UIViewController {
 //MARK: - Core Location
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        print("Location Manager - didChangeAuthorization", status)
         mapView.showsUserLocation = (status == .authorizedAlways)
     }
 
     func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
         updateLocation(location: locations.last!)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        if let error = error as? CLError, error.code == .denied {
-            // Location updates are not authorized.
-            manager.stopUpdatingLocation()
-            return
-        }
-        // TODO: Notify the user of any errors.
-        print("Location Manager failed with the following error:", error, error.localizedDescription)
     }
 }
 

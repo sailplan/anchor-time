@@ -12,6 +12,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.requestAlwaysAuthorization()
         
         notificationCenter.delegate = self
@@ -68,6 +73,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("Location Manager - didChangeAuthorization", status)
+
         switch status {
         case .authorizedAlways:
             // This is what was expected.
@@ -93,7 +100,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        print("Monitoring location", region)
+        print("Location Manager - didStartMonitoringFor", region)
     }
 
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
@@ -105,19 +112,30 @@ extension AppDelegate: CLLocationManagerDelegate {
         case .unknown:
             print("Could not determine state for region", region)
         }
-
     }
 
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?,
                          withError error: Error) {
-        print("Monitoring failed for region", region!)
+        print("Location Manager - monitoringDidFailFor", region!, error)
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location Manager  - didFailWithError:", error)
     }
 
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        print("Exiting region", region)
+        print("Location Manager - didExitRegion", region)
     }
 
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("Entering region", region)
+        print("Locastion Manager - didEnterRegion", region)
+    }
+
+    func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
+        print("Locastion Manager - didPauseLocationUpdates")
+    }
+    
+    func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
+        print("Locastion Manager - didResumeLocationUpdates")
     }
 }
