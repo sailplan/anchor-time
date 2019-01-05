@@ -51,15 +51,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print("Receiving notification", notification)
-        // Process notification content
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler:
+        @escaping () -> Void) {
+        print("Receiving notification in background", response.notification)
 
+        completionHandler()
+    }
+    
+    // Receive local notification when app in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+
+        print("Receiving notification in foreground", notification)
         completionHandler([.alert, .sound]) // Display notification as regular alert and play sound
     }
 }
 
 extension AppDelegate: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedAlways:
+            // This is what was expected.
+            break
+        case .notDetermined:
+            manager.requestAlwaysAuthorization()
+        case .authorizedWhenInUse, .restricted, .denied:
+            let alertController = UIAlertController(
+                title: "Background Location Access Disabled",
+                message: "Background location access must be allowed to use this app. Open settings and set location access to 'Always'.",
+                preferredStyle: .alert)
+            
+            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+                if let url = URL(string:UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:])
+                }
+            }
+            alertController.addAction(openAction)
+            
+            self.window!.rootViewController!.present(alertController, animated: true, completion: nil)
+            
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         print("Monitoring location", region)
     }
