@@ -9,6 +9,7 @@ class ViewController: UIViewController {
     let locationManager = CLLocationManager()
     let notificationCenter = UNUserNotificationCenter.current()
     var alarm: AVAudioPlayer?
+    let volumeView = MPVolumeView(frame: CGRect(x: -CGFloat.greatestFiniteMagnitude, y: 0.0, width: 0.0, height: 0.0))
 
     var anchorage: Anchorage?
     var circle: MKCircle?
@@ -39,7 +40,11 @@ class ViewController: UIViewController {
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
 
+        // Add hidden volume view so we can control volume
+        self.view.addSubview(volumeView)
+
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: .volumeDidChange, object: nil)
 
         self.anchorage = Anchorage.load()
         renderAnchorage()
@@ -180,6 +185,11 @@ class ViewController: UIViewController {
         )
     }
 
+    @objc func volumeDidChange(_ notification:Notification) {
+        print("Volume buttons pressed")
+        stopAlarm()
+    }
+
     func activateAlarm() {
         let alertController = UIAlertController(
             title: "Anchor dragging",
@@ -193,7 +203,7 @@ class ViewController: UIViewController {
 
         present(alertController, animated: true)
 
-        MPVolumeView.setVolume(1.0)
+        volumeView.setVolume(1.0)
         alarm?.play()
     }
 
@@ -223,7 +233,7 @@ class ViewController: UIViewController {
             print("Can't play the audio file failed with an error \(error.localizedDescription)")
         }
         alarm?.numberOfLoops = -1
-        MPVolumeView.setVolume(1.0)
+        volumeView.setVolume(1.0)
     }
     
 }
