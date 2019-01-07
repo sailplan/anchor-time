@@ -99,36 +99,8 @@ extension AppDelegate: CLLocationManagerDelegate {
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        print("Location Manager - didStartMonitoringFor", region)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-        switch state {
-        case .inside:
-            print("Inside region", region)
-        case .outside:
-            print("Outside region", region)
-        case .unknown:
-            print("Could not determine state for region", region)
-        }
-    }
-
-    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?,
-                         withError error: Error) {
-        print("Location Manager - monitoringDidFailFor", region!, error)
-    }
-
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location Manager  - didFailWithError:", error)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        print("Location Manager - didExitRegion", region)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("Locastion Manager - didEnterRegion", region)
     }
 
     func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {

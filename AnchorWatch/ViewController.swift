@@ -34,11 +34,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if !CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) {
-            showAlert(withTitle:"Error", message: "Location monitoring is not supported on this device!")
-            return
-        }
-
         mapView.delegate = self
 
         locationManager.delegate = self
@@ -78,36 +73,8 @@ class ViewController: UIViewController {
         anchorage.set()
         print("Anchor set", anchorage.coordinate, anchorage.radius)
 
-        let fence = anchorage.fence
-        locationManager.startMonitoring(for: fence)
-        createNotification(fence)
-
         updateUI()
         setupAlarm()
-    }
-
-    func createNotification(_ fence: CLCircularRegion) {
-        let trigger = UNLocationNotificationTrigger(region: fence, repeats: true)
-        let request = UNNotificationRequest(identifier: "dragging",
-                                            content: notificationContent,
-                                            trigger: trigger)
-
-        notificationCenter.add(request) { error in
-            if let error = error {
-                print("Error: \(error)")
-            }
-        }
-    }
-
-    func createTestNotification() {
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-        let request = UNNotificationRequest(identifier: "test", content: notificationContent, trigger: trigger)
-
-        notificationCenter.add(request) { error in
-            if let error = error {
-                print("Error: \(error)")
-            }
-        }
     }
 
     @IBAction func cancel(_ sender: Any) {
@@ -121,10 +88,6 @@ class ViewController: UIViewController {
             self.circle = nil
         }
 
-        // Stop location monitoring
-        locationManager.monitoredRegions.forEach {
-            locationManager.stopMonitoring(for: $0)
-        }
         notificationCenter.removeAllPendingNotificationRequests()
 
         // Reset Model

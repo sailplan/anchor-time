@@ -26,10 +26,7 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     /// The anchorage as a CLCircularRegion
     var fence: CLCircularRegion {
-        let region = CLCircularRegion(center: coordinate, radius: radius, identifier: "anchorage")
-        region.notifyOnEntry = true
-        region.notifyOnExit = true
-        return region
+        return CLCircularRegion(center: coordinate, radius: radius, identifier: "anchorage")
     }
 
     /// The anchorage as a MKCircle
