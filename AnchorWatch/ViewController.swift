@@ -56,6 +56,7 @@ class ViewController: UIViewController {
     @objc func didChangeState(_ notification:Notification) {
         switch anchorage!.state {
         case .dragging:
+            deliverNotification()
             activateAlarm()
         default:
             print("Anchorage state changed", anchorage!.state)
@@ -80,6 +81,20 @@ class ViewController: UIViewController {
 
         updateUI()
         setupAlarm()
+    }
+
+    func deliverNotification() {
+        let request = UNNotificationRequest(
+            identifier: "dragging",
+            content: notificationContent,
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        )
+
+        notificationCenter.add(request) { error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
     }
 
     @IBAction func cancel(_ sender: Any) {
