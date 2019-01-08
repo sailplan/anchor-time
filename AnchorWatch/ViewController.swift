@@ -46,6 +46,9 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: .volumeDidChange, object: nil)
 
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange(_:)), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
+
         self.anchorage = Anchorage.load()
         renderAnchorage()
         updateUI()
@@ -198,6 +201,40 @@ class ViewController: UIViewController {
             Int(latDegrees), latMinutes, latDegrees >= 0 ? "N" : "S",
             Int(longDegrees), longMinutes, longDegrees >= 0 ? "E" : "W"
         )
+    }
+
+    // Trigger a notification if battery gets low
+    @objc func batteryLevelDidChange(_ notification:Notification) {
+        // Do nothing if anchorage is not set
+        guard anchorage?.state == .set else { return }
+
+        let batteryState = UIDevice.current.batteryState
+        let batteryLevel = UIDevice.current.batteryLevel
+
+        // Do nothing if battery is charging or is not low
+        if (batteryState == .charging || batteryLevel > 0.2) {
+            return
+        }
+
+        print("Battery low", batteryLevel)
+
+        let content = UNMutableNotificationContent()
+        content.title = "Low battery!"
+        content.body = "Plug in your device to continue monitoring your anchorage."
+        content.sound = UNNotificationSound.default
+
+        let request = UNNotificationRequest(
+            identifier: "low-battery",
+            content: content,
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        )
+
+        notificationCenter.add(request)
+
+        // Only play alarm if battery is critically low.
+        if (batteryLevel <= 0.1) {
+            activateAlarm()
+        }
     }
 
     @objc func volumeDidChange(_ notification:Notification) {
