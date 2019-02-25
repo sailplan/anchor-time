@@ -72,7 +72,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="50N-Xk-qeu" userLabel="Dashboard">
-                                <rect key="frame" x="0.0" y="296.5" width="375" height="370.5"/>
+                                <rect key="frame" x="0.0" y="378.5" width="375" height="288.5"/>
                                 <subviews>
                                     <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mbP-L7-WS7">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="288.5"/>
@@ -150,10 +150,10 @@
                                                     </constraints>
                                                 </view>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Tek-8r-1Je" userLabel="Alarm properties">
-                                                    <rect key="frame" x="16" y="98.5" width="343" height="174.5"/>
+                                                    <rect key="frame" x="16" y="98.5" width="343" height="174"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="izs-6D-JjE">
-                                                            <rect key="frame" x="0.0" y="0.0" width="273" height="65"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="203" height="65"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Alarm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cD-pV-xqc">
                                                                     <rect key="frame" x="0.0" y="0.0" width="33" height="14.5"/>
@@ -161,14 +161,14 @@
                                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EvA-Dt-5hh">
-                                                                    <rect key="frame" x="0.0" y="14.5" width="113.5" height="36"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EvA-Dt-5hh">
+                                                                    <rect key="frame" x="0.0" y="14.5" width="21" height="36"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                                                     <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+/- accuracy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RQO-Ye-3Of">
-                                                                    <rect key="frame" x="0.0" y="50.5" width="72.5" height="14.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+/- …" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RQO-Ye-3Of">
+                                                                    <rect key="frame" x="0.0" y="50.5" width="30.5" height="14.5"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                                     <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -176,7 +176,7 @@
                                                             </subviews>
                                                         </stackView>
                                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ver-wi-Qtm">
-                                                            <rect key="frame" x="273" y="0.0" width="70" height="50"/>
+                                                            <rect key="frame" x="203" y="0.0" width="70" height="50"/>
                                                             <color key="backgroundColor" red="0.1647058824" green="0.67843137249999996" blue="0.52156862749999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="50" id="57R-gB-k4N"/>
@@ -194,6 +194,26 @@
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="setAnchor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mFg-lR-v3L"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xXE-QV-BIO">
+                                                            <rect key="frame" x="273" y="0.0" width="70" height="50"/>
+                                                            <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="131-Ta-G4S"/>
+                                                                <constraint firstAttribute="height" constant="50" id="lyl-O5-mEu"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Stop">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                    <integer key="value" value="8"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="cancel:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MI6-cd-3rI"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -217,48 +237,10 @@
                                         </view>
                                         <blurEffect style="dark"/>
                                     </visualEffectView>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q8L-GP-NJ2">
-                                        <rect key="frame" x="0.0" y="288.5" width="375" height="82"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="wsk-bx-hYK">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="82"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xXE-QV-BIO">
-                                                    <rect key="frame" x="289" y="16" width="70" height="50"/>
-                                                    <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="131-Ta-G4S"/>
-                                                        <constraint firstAttribute="height" constant="50" id="lyl-O5-mEu"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Stop">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </state>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                            <integer key="value" value="8"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                    <connections>
-                                                        <action selector="cancel:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MI6-cd-3rI"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="xXE-QV-BIO" firstAttribute="top" secondItem="wsk-bx-hYK" secondAttribute="top" constant="16" id="POs-RT-T6h"/>
-                                                <constraint firstAttribute="trailing" secondItem="xXE-QV-BIO" secondAttribute="trailing" constant="16" id="fVa-Uz-su1"/>
-                                                <constraint firstItem="6jY-ei-WBg" firstAttribute="bottom" secondItem="xXE-QV-BIO" secondAttribute="bottom" constant="16" id="rc8-bb-nJk"/>
-                                            </constraints>
-                                            <viewLayoutGuide key="safeArea" id="6jY-ei-WBg"/>
-                                        </view>
-                                        <blurEffect style="dark"/>
-                                    </visualEffectView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="q8L-GP-NJ2" firstAttribute="leading" secondItem="50N-Xk-qeu" secondAttribute="leading" id="Kzk-Xh-urO"/>
                                     <constraint firstItem="mbP-L7-WS7" firstAttribute="leading" secondItem="50N-Xk-qeu" secondAttribute="leading" id="jku-pI-rfc"/>
                                     <constraint firstAttribute="trailing" secondItem="mbP-L7-WS7" secondAttribute="trailing" id="m9y-G2-dBZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="q8L-GP-NJ2" secondAttribute="trailing" id="yOg-8g-Ngy"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -282,11 +264,13 @@
                         <outlet property="anchorDistanceLabel" destination="Rr0-iv-xVA" id="TR7-dr-muT"/>
                         <outlet property="anchorPositionLabel" destination="8Ak-Ef-tFL" id="Laq-T8-rAF"/>
                         <outlet property="anchorageRadiusLabel" destination="EvA-Dt-5hh" id="KnQ-Gk-6By"/>
+                        <outlet property="cancelButton" destination="H5K-xx-6UV" id="00F-pw-iFu"/>
+                        <outlet property="dashboardView" destination="50N-Xk-qeu" id="3kH-HD-lNw"/>
                         <outlet property="dropAnchorButton" destination="1Pv-9Z-FpY" id="EsD-bb-8Ld"/>
-                        <outlet property="droppedDashboard" destination="mbP-L7-WS7" id="F2i-MJ-2rG"/>
                         <outlet property="gpsAccuracyLabel" destination="RQO-Ye-3Of" id="c7e-Zx-JLd"/>
                         <outlet property="mapView" destination="YKc-kX-KOK" id="d2M-c2-yAy"/>
-                        <outlet property="setDashboard" destination="q8L-GP-NJ2" id="qIt-aS-oyX"/>
+                        <outlet property="setButton" destination="Ver-wi-Qtm" id="rJE-AT-kJl"/>
+                        <outlet property="stopButton" destination="xXE-QV-BIO" id="hU7-Tu-DDz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

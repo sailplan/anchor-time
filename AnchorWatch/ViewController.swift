@@ -17,8 +17,10 @@ class ViewController: UIViewController {
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var dropAnchorButton: UIView!
-    @IBOutlet weak var droppedDashboard: UIView!
-    @IBOutlet weak var setDashboard: UIView!
+    @IBOutlet weak var dashboardView: UIView!
+    @IBOutlet weak var setButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var anchorPositionLabel: UILabel!
     @IBOutlet weak var anchorageRadiusLabel: UILabel!
     @IBOutlet weak var gpsAccuracyLabel: UILabel!
@@ -176,15 +178,21 @@ class ViewController: UIViewController {
     }
 
     func updateUI() {
-        self.dropAnchorButton.isHidden = anchorage != nil
-        self.droppedDashboard.isHidden = anchorage == nil || anchorage!.state != .dropped
-        self.setDashboard.isHidden = anchorage == nil || anchorage!.state != .set
-        
         if(anchorage == nil) {
+            self.dashboardView.isHidden = true
+            self.dropAnchorButton.isHidden = false
+
             // Start following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
             mapView.isZoomEnabled = true
         } else {
+            self.dashboardView.isHidden = false
+            self.dropAnchorButton.isHidden = true
+
+            self.setButton.isHidden = anchorage!.state != .dropped
+            self.stopButton.isHidden = anchorage!.state != .set
+            self.cancelButton.isHidden = anchorage!.state == .set
+
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
             mapView.isZoomEnabled = false
