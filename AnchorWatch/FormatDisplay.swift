@@ -13,4 +13,8 @@ struct FormatDisplay {
 
         return formatter.string(from: distance)
     }
+
+    static func degrees(_ degrees: Double) -> String {
+        return String(format: "%dº", Int(round(degrees)))
+    }
 }

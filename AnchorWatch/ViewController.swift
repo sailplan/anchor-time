@@ -22,6 +22,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var anchorPositionLabel: UILabel!
     @IBOutlet weak var anchorageRadiusLabel: UILabel!
     @IBOutlet weak var gpsAccuracyLabel: UILabel!
+    @IBOutlet weak var anchorBearingLabel: UILabel!
+    @IBOutlet weak var anchorDistanceLabel: UILabel!
 
     var notificationContent: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
@@ -147,6 +149,8 @@ class ViewController: UIViewController {
     }
     
     func updateLocation(location: CLLocation) {
+        gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
+
         guard let anchorage = self.anchorage else { return }
 
         if let lastLocation = anchorage.locations.last {
@@ -154,8 +158,8 @@ class ViewController: UIViewController {
             mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
         }
         
-        gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
-        
+        anchorBearingLabel.text = FormatDisplay.degrees(anchorage.bearingFrom(location.coordinate))
+        anchorDistanceLabel.text = FormatDisplay.distance(anchorage.distanceTo(location))
         anchorage.track(location)
 
         switch anchorage.state {
@@ -275,7 +279,7 @@ class ViewController: UIViewController {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.duckOthers, .defaultToSpeaker])
         } catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+            print("Setting category to AVAudioSessionCategoryPlayback failed", error.localizedDescription)
         }
         
         let fileURL = Bundle.main.path(forResource: "alarm", ofType: "mp3")

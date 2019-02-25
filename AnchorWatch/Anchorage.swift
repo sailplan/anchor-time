@@ -68,6 +68,25 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         return location.distance(from: otherLocation)
     }
 
+    func bearingFrom(_ otherLocation: CLLocationCoordinate2D) -> Double {
+        // get lat/lon in radians
+        let lat1 = otherLocation.latitude * .pi / 180.0
+        let lon1 = otherLocation.longitude * .pi / 180.0
+        let lat2 = self.coordinate.latitude * .pi / 180.0
+        let lon2 = self.coordinate.longitude * .pi / 180.0
+        let dLon = lon2 - lon1
+
+        let y = sin(dLon) * cos(lat2)
+        let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
+        let bearing = atan2(y, x) * 180.0 / .pi
+
+        if (bearing >= 0) {
+            return bearing
+        } else {
+            return 360.0 + bearing
+        }
+    }
+
     /// Set the anchor and save the anchorage
     func set() {
         self.state = .set
