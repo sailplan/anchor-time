@@ -43,6 +43,13 @@ class ViewController: UIViewController {
         mapView.delegate = self
 
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.pausesLocationUpdatesAutomatically = false
+        locationManager.showsBackgroundLocationIndicator = true
+        locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
 
         // Add hidden volume view so we can control volume
