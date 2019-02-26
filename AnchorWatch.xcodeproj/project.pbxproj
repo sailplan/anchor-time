@@ -22,6 +22,7 @@
 		7EB6AB86210DF3D800C97117 /* AnchorWatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB85210DF3D800C97117 /* AnchorWatchTests.swift */; };
 		7EB6AB91210DF3D800C97117 /* AnchorWatchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */; };
 		7EB6ABA0210DF3E700C97117 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB6AB9F210DF3E700C97117 /* MapKit.framework */; };
+		7EB737BB222597FE00E7D1F0 /* RondeIsland.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorWatchUITests.swift; sourceTree = "<group>"; };
 		7EB6AB92210DF3D800C97117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EB6AB9F210DF3E700C97117 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = RondeIsland.gpx; sourceTree = "<group>"; };
 		7ED7EC532110C68400C7ACC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7ED7EC542110D50000C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; name = mockups.sketch; path = ../../../../Desktop/mockups.sketch; sourceTree = "<group>"; };
 		7ED7EC552110D50A00C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockups.sketch; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */,
+				7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */,
 				7EB6AB85210DF3D800C97117 /* AnchorWatchTests.swift */,
 				7EB6AB87210DF3D800C97117 /* Info.plist */,
 			);
@@ -300,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E68E0B02112240600B44FFE /* LakeCharlevoix.gpx in Resources */,
+				7EB737BB222597FE00E7D1F0 /* RondeIsland.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

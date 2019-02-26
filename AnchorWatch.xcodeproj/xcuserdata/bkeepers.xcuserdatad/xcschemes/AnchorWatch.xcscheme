@@ -84,7 +84,7 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <LocationScenarioReference
-         identifier = "../../AnchorWatchTests/LakeCharlevoix.gpx"
+         identifier = "../../AnchorWatchTests/RondeIsland.gpx"
          referenceType = "0">
       </LocationScenarioReference>
    </LaunchAction>
