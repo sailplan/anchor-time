@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var gpsAccuracyLabel: UILabel!
     @IBOutlet weak var anchorBearingLabel: UILabel!
     @IBOutlet weak var anchorDistanceLabel: UILabel!
+    @IBOutlet weak var userTrackingModeButton: UIButton!
 
     var notificationContent: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
@@ -72,8 +73,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func dropAnchor(_ sender: Any) {
-        guard let location = locationManager.location else { return }
-        anchorage = Anchorage(coordinate: location.coordinate)
+        anchorage = Anchorage(coordinate: mapView.centerCoordinate)
+        // Ensure anchorage includes current location to start
+        anchorage!.widen(locationManager.location!)
 
         print("Anchor dropped", anchorage!.coordinate)
 
@@ -124,7 +126,11 @@ class ViewController: UIViewController {
         stopAlarm()
         updateUI()
     }
-    
+
+    @IBAction func followUserTapped() {
+        mapView.setUserTrackingMode(.follow, animated: true)
+    }
+
     func renderAnchorage() {
         guard let anchorage = self.anchorage else { return }
         
@@ -144,9 +150,7 @@ class ViewController: UIViewController {
         circle = anchorage.circle
         mapView.addOverlay(circle!)
 
-        // Center map on anchorage
-        mapView.setRegion(anchorage.region, animated: true)
-        
+        anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
         anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
     }
     
@@ -168,9 +172,9 @@ class ViewController: UIViewController {
         case .dropped:
             anchorage.widen(location)
             renderCircle()
+            scrollAnchorageIntoView()
         case .set:
             anchorage.check(location)
-            // TODO: Track location
         case .dragging:
             // TODO: already dragging
             break
@@ -178,43 +182,40 @@ class ViewController: UIViewController {
     }
 
     func updateUI() {
-        if(anchorage == nil) {
-            self.dashboardView.isHidden = true
-            self.dropAnchorButton.isHidden = false
+        if let anchorage = self.anchorage {
+            dashboardView.isHidden = false
+            dropAnchorButton.isHidden = true
+            userTrackingModeButton.superview!.isHidden = true
 
-            // Start following user's current location
-            mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
-            mapView.isZoomEnabled = true
-        } else {
-            self.dashboardView.isHidden = false
-            self.dropAnchorButton.isHidden = true
-
-            self.setButton.isHidden = anchorage!.state != .dropped
-            self.stopButton.isHidden = anchorage!.state != .set
-            self.cancelButton.isHidden = anchorage!.state == .set
+            setButton.isHidden = anchorage.state != .dropped
+            stopButton.isHidden = anchorage.state != .set
+            cancelButton.isHidden = anchorage.state == .set
 
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
             mapView.isZoomEnabled = false
-            
-            anchorPositionLabel.text = coordinateString(anchorage!.coordinate)
+            mapView.isScrollEnabled = anchorage.state != .set
+
+            scrollAnchorageIntoView()
+        } else {
+            dashboardView.isHidden = true
+            dropAnchorButton.isHidden = false
+            userTrackingModeButton.superview!.isHidden = false
+
+            // Start following user's current location
+            mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
+            mapView.isZoomEnabled = true
+            mapView.isScrollEnabled = true
         }
     }
-    
-    func coordinateString(_ coordinate: CLLocationCoordinate2D) -> String {
-        let latDegrees = floor(abs(coordinate.latitude))
-        let latMinutes = 60 * (abs(coordinate.latitude) - latDegrees)
-        
-        let longDegrees = floor(abs(coordinate.longitude))
-        let longMinutes = 60 * (abs(coordinate.longitude) - longDegrees)
-        
-        return String(
-            format: "%d°%.3f'%@  %d°%.3f'%@",
-            Int(latDegrees), latMinutes, latDegrees >= 0 ? "N" : "S",
-            Int(longDegrees), longMinutes, longDegrees >= 0 ? "E" : "W"
-        )
-    }
 
+    func scrollAnchorageIntoView() {
+        guard let anchorage = anchorage else { return }
+
+        // Center map on anchorage
+        mapView.setRegion(mapView.regionThatFits(anchorage.region), animated: true)
+    }
+    
     // Trigger a notification if battery gets low
     @objc func batteryLevelDidChange(_ notification:Notification) {
         // Do nothing if anchorage is not set
@@ -315,6 +316,16 @@ extension ViewController: CLLocationManagerDelegate {
 
 //MARK: - MapKit
 extension ViewController: MKMapViewDelegate {
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        guard let anchorage = anchorage else { return }
+        anchorage.coordinate = mapView.centerCoordinate
+        renderCircle()
+    }
+
+    func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
+        userTrackingModeButton.tintColor = mode == .follow ? view.tintColor : UIColor.darkGray
+    }
+
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var view : MKMarkerAnnotationView
         guard let annotation = annotation as? Anchorage else { return nil }

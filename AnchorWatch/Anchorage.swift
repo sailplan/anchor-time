@@ -14,7 +14,7 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         }
     }
 
-    let coordinate: CLLocationCoordinate2D
+    @objc dynamic var coordinate: CLLocationCoordinate2D
     var radius: CLLocationDistance = 0
     var locations: [CLLocation] = []
     let identifier = "anchorage"
@@ -43,7 +43,6 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
         super.init()
-        self.track(location)
         self.save()
     }
 

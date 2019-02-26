@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" scrollEnabled="NO" rotateEnabled="NO" showsUserLocation="YES" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YKc-kX-KOK">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" rotateEnabled="NO" showsUserLocation="YES" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YKc-kX-KOK">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Pv-9Z-FpY">
@@ -182,6 +182,7 @@
                                                                 <constraint firstAttribute="height" constant="50" id="57R-gB-k4N"/>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="qHn-v6-6Us"/>
                                                             </constraints>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal" title="Set">
                                                                 <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -203,6 +204,7 @@
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="131-Ta-G4S"/>
                                                                 <constraint firstAttribute="height" constant="50" id="lyl-O5-mEu"/>
                                                             </constraints>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                             <state key="normal" title="Stop">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
@@ -243,11 +245,37 @@
                                     <constraint firstAttribute="trailing" secondItem="mbP-L7-WS7" secondAttribute="trailing" id="m9y-G2-dBZ"/>
                                 </constraints>
                             </stackView>
+                            <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bey-Qp-MtK" userLabel="Follow User">
+                                <rect key="frame" x="319" y="611" width="40" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AWL-T3-ehs">
+                                        <rect key="frame" x="8" y="8" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="follow-user"/>
+                                        <state key="disabled" image="follow-user"/>
+                                        <connections>
+                                            <action selector="followUserTapped" destination="BYZ-38-t0r" eventType="touchUpInside" id="dwU-eG-aWu"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="d5E-DB-Hou"/>
+                                    <constraint firstAttribute="height" constant="40" id="xVE-kA-HoG"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="YKc-kX-KOK" firstAttribute="centerX" secondItem="Qvq-7t-SVB" secondAttribute="centerX" id="6Q7-Sw-bjl"/>
+                            <constraint firstItem="Qvq-7t-SVB" firstAttribute="bottom" secondItem="Bey-Qp-MtK" secondAttribute="bottom" constant="16" id="8Bn-bD-wa0"/>
                             <constraint firstItem="1Pv-9Z-FpY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-40" id="8Ph-hn-lkF"/>
+                            <constraint firstItem="Qvq-7t-SVB" firstAttribute="trailing" secondItem="Bey-Qp-MtK" secondAttribute="trailing" constant="16" id="KbJ-VZ-g7Z"/>
                             <constraint firstItem="Qvq-7t-SVB" firstAttribute="trailing" secondItem="YKc-kX-KOK" secondAttribute="trailing" id="Lki-tI-YNy"/>
                             <constraint firstItem="50N-Xk-qeu" firstAttribute="leading" secondItem="Qvq-7t-SVB" secondAttribute="leading" id="PAj-me-7Tt"/>
                             <constraint firstAttribute="bottom" secondItem="YKc-kX-KOK" secondAttribute="bottom" id="bU1-aL-JU4"/>
@@ -271,6 +299,7 @@
                         <outlet property="mapView" destination="YKc-kX-KOK" id="d2M-c2-yAy"/>
                         <outlet property="setButton" destination="Ver-wi-Qtm" id="rJE-AT-kJl"/>
                         <outlet property="stopButton" destination="xXE-QV-BIO" id="hU7-Tu-DDz"/>
+                        <outlet property="userTrackingModeButton" destination="AWL-T3-ehs" id="MgA-hR-si4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -281,6 +310,7 @@
     <resources>
         <image name="anchor" width="300" height="300"/>
         <image name="disclosure" width="180" height="180"/>
+        <image name="follow-user" width="36" height="36"/>
     </resources>
     <color key="tintColor" red="0.1647058824" green="0.67843137249999996" blue="0.52156862749999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
 </document>
