@@ -50,7 +50,6 @@ class ViewController: UIViewController {
         locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.showsBackgroundLocationIndicator = true
         locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
 
         // Add hidden volume view so we can control volume
         self.view.addSubview(volumeView)
@@ -86,6 +85,7 @@ class ViewController: UIViewController {
 
         print("Anchor dropped", anchorage!.coordinate)
 
+        locationManager.startUpdatingLocation()
         renderAnchorage()
         updateUI()
     }
@@ -131,6 +131,7 @@ class ViewController: UIViewController {
         self.anchorage = nil
 
         stopAlarm()
+        locationManager.stopUpdatingLocation()
         updateUI()
     }
 
