@@ -1,18 +1,16 @@
 import UIKit
 import MapKit
 import UserNotifications
-import AVFoundation
-import MediaPlayer
 
 class ViewController: UIViewController {
     //MARK: - Properties
     let locationManager = CLLocationManager()
+    let alarm = Alarm()
     let notificationCenter = UNUserNotificationCenter.current()
-    var alarm: AVAudioPlayer?
-    let volumeView = MPVolumeView(frame: CGRect(x: -CGFloat.greatestFiniteMagnitude, y: 0.0, width: 0.0, height: 0.0))
 
     var anchorage: Anchorage?
     var circle: MKCircle?
+
 
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -52,7 +50,7 @@ class ViewController: UIViewController {
         locationManager.requestAlwaysAuthorization()
 
         // Add hidden volume view so we can control volume
-        self.view.addSubview(volumeView)
+        self.view.addSubview(alarm.volumeView)
 
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: .volumeDidChange, object: nil)
@@ -96,7 +94,6 @@ class ViewController: UIViewController {
         print("Anchor set", anchorage.coordinate, anchorage.radius)
 
         updateUI()
-        setupAlarm()
     }
 
     func deliverNotification() {
@@ -130,7 +127,7 @@ class ViewController: UIViewController {
         anchorage.clear()
         self.anchorage = nil
 
-        stopAlarm()
+        alarm.stop()
         locationManager.stopUpdatingLocation()
         updateUI()
     }
@@ -260,7 +257,7 @@ class ViewController: UIViewController {
 
     @objc func volumeDidChange(_ notification:Notification) {
         print("Volume buttons pressed")
-        stopAlarm()
+        alarm.stop()
     }
 
     func activateAlarm() {
@@ -271,17 +268,12 @@ class ViewController: UIViewController {
         )
 
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            self.stopAlarm()
+            self.alarm.stop()
         })
 
         present(alertController, animated: true)
 
-        volumeView.setVolume(1.0)
-        alarm?.play()
-    }
-
-    func stopAlarm() {
-        alarm?.stop()
+        alarm.start()
     }
 
     func showAlert(withTitle title: String?, message: String?) {
@@ -290,25 +282,6 @@ class ViewController: UIViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
-
-    func setupAlarm() {
-        // Ensure audio plays even if in silent mode
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.duckOthers, .defaultToSpeaker])
-        } catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed", error.localizedDescription)
-        }
-        
-        let fileURL = Bundle.main.path(forResource: "alarm", ofType: "mp3")
-        do {
-            alarm = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: fileURL!))
-        } catch let error {
-            print("Can't play the audio file failed with an error \(error.localizedDescription)")
-        }
-        alarm?.numberOfLoops = -1
-        volumeView.setVolume(1.0)
-    }
-    
 }
 
 //MARK: - Core Location

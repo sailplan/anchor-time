@@ -23,6 +23,7 @@
 		7EB6AB91210DF3D800C97117 /* AnchorWatchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB6AB90210DF3D800C97117 /* AnchorWatchUITests.swift */; };
 		7EB6ABA0210DF3E700C97117 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB6AB9F210DF3E700C97117 /* MapKit.framework */; };
 		7EB737BB222597FE00E7D1F0 /* RondeIsland.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */; };
+		7EB737BD22265F5D00E7D1F0 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB737BC22265F5D00E7D1F0 /* Alarm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		7EB6AB92210DF3D800C97117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EB6AB9F210DF3E700C97117 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = RondeIsland.gpx; sourceTree = "<group>"; };
+		7EB737BC22265F5D00E7D1F0 /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 		7ED7EC532110C68400C7ACC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7ED7EC542110D50000C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; name = mockups.sketch; path = ../../../../Desktop/mockups.sketch; sourceTree = "<group>"; };
 		7ED7EC552110D50A00C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockups.sketch; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				7EB6AB70210DF3D700C97117 /* AppDelegate.swift */,
+				7EB737BC22265F5D00E7D1F0 /* Alarm.swift */,
 				7EB6AB72210DF3D700C97117 /* ViewController.swift */,
 				7E3BED15210EB5900069EE88 /* Anchorage.swift */,
 				7EB6AB74210DF3D700C97117 /* Main.storyboard */,
@@ -326,6 +329,7 @@
 				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
 				7EA86C9921DBF4D100D51CF4 /* FormatDisplay.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,
+				7EB737BD22265F5D00E7D1F0 /* Alarm.swift in Sources */,
 				7EA86C9B21DC66A100D51CF4 /* MPVolumeView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
