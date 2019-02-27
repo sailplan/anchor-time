@@ -150,7 +150,7 @@
                                                     </constraints>
                                                 </view>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Tek-8r-1Je" userLabel="Alarm properties">
-                                                    <rect key="frame" x="16" y="98.5" width="343" height="174"/>
+                                                    <rect key="frame" x="16" y="98.5" width="343" height="174.5"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="izs-6D-JjE">
                                                             <rect key="frame" x="0.0" y="0.0" width="203" height="65"/>

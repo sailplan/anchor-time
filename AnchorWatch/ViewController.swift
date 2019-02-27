@@ -12,6 +12,29 @@ class ViewController: UIViewController {
     var circle: MKCircle?
 
 
+    var radius: CLLocationDistance {
+        get {
+            return anchorage?.radius ?? 0
+        }
+
+        set {
+            anchorage?.radius = newValue
+        }
+    }
+
+    var mkCircleRenderer : GeofenceMKCircleRenderer?
+    var isGeofenceResizingAllowed : Bool = false {
+        didSet {
+            if isGeofenceResizingAllowed != oldValue {
+                //                self.mapView.isRotateEnabled = !isGeofenceResizingAllowed
+                //                self.mapView.isScrollEnabled = !isGeofenceResizingAllowed
+            }
+        }
+    }
+
+    fileprivate var lastMapPoint : MKMapPoint? = nil
+    fileprivate var oldFenceRadius : Double = 0.0
+
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var dropAnchorButton: UIView!
@@ -61,6 +84,7 @@ class ViewController: UIViewController {
         self.anchorage = Anchorage.load()
         renderAnchorage()
         updateUI()
+        addGestureRecognizer()
     }
 
     //MARK: - App logic
@@ -75,7 +99,7 @@ class ViewController: UIViewController {
             // no worries
         }
     }
-    
+
     @IBAction func dropAnchor(_ sender: Any) {
         anchorage = Anchorage(coordinate: mapView.centerCoordinate)
         // Ensure anchorage includes current location to start
@@ -91,7 +115,7 @@ class ViewController: UIViewController {
     @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
-        print("Anchor set", anchorage.coordinate, anchorage.radius)
+        print("Anchor set", anchorage.coordinate, radius)
 
         updateUI()
     }
@@ -154,9 +178,10 @@ class ViewController: UIViewController {
         
         circle = anchorage.circle
         mapView.addOverlay(circle!)
+        mkCircleRenderer?.set(radius: circle!.radius)
 
         anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
-        anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
+        anchorageRadiusLabel.text = FormatDisplay.distance(radius)
     }
     
     func updateLocation(location: CLLocation) {
@@ -282,6 +307,75 @@ class ViewController: UIViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+
+    func addGestureRecognizer() {
+        let gestureRecognizer = GeofenceGestureRecognizer()
+        self.mapView.addGestureRecognizer(gestureRecognizer)
+        gestureRecognizer.touchesBeganCallback = { ( touches: Set<UITouch>, event : UIEvent) in
+            if let touch = touches.first {
+                self.mapView.isScrollEnabled = false
+                let pointOnMapView = touch.location(in: self.mapView)
+                let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
+                let mapPoint = MKMapPoint(coordinateFromPoint)
+                if let fenceRederer = self.mkCircleRenderer {
+                    if let thumbMapRect = fenceRederer.thumbBounds {
+                        /* get rect of thumb */
+                        if thumbMapRect.contains(mapPoint) {
+                            /* touched on thumb */
+                            self.isGeofenceResizingAllowed = true
+                            self.oldFenceRadius = fenceRederer.getRadius()
+                        }                    }
+                }
+                self.lastMapPoint = mapPoint
+            }
+        }
+        gestureRecognizer.touchesMovedCallback = { ( touches: Set<UITouch>, event : UIEvent) in
+            /* if resizing is allowed and only one touch is processed perform resizing */
+            if self.isGeofenceResizingAllowed && touches.count == 1 {
+
+                if let touch = touches.first {
+                    let pointOnMapView = touch.location(in: self.mapView)
+                    let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
+                    let mapPoint = MKMapPoint(coordinateFromPoint)
+
+                    if let lastPoint = self.lastMapPoint {
+                        var meterDistance = (mapPoint.x-lastPoint.x)/MKMapPointsPerMeterAtLatitude(coordinateFromPoint.latitude)+self.oldFenceRadius
+                        if meterDistance > 0 {
+                            //                            if abs(meterDistance-self.oldFenceRadius) >= DEFAULT_STEP_RADIUS {
+                            self.mkCircleRenderer?.set(radius: meterDistance)
+                            if let rad = self.mkCircleRenderer?.getRadius() {
+                                meterDistance = rad
+                            }
+                            //                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        gestureRecognizer.touchesEndedCallback = { ( touches: Set<UITouch>, event : UIEvent) in
+
+            if self.isGeofenceResizingAllowed && touches.count == 1 {
+                if let _ = touches.first {
+                    self.mapView.isScrollEnabled = true
+
+                    if let circleRenderer = self.mkCircleRenderer {
+                        let radius = circleRenderer.getRadius()
+                        let zoomCoordinate = circleRenderer.circle.coordinate
+                        let zoomRadius = radius*4
+                        self.mapView.setRegion(MKCoordinateRegion(center: zoomCoordinate, latitudinalMeters: zoomRadius, longitudinalMeters: zoomRadius), animated: false)
+                        circleRenderer.set(radius: radius)
+                    }
+                }
+            }
+
+
+            self.isGeofenceResizingAllowed = false
+        }
+
+
+    }
+
 }
 
 //MARK: - Core Location
@@ -323,12 +417,9 @@ extension ViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         switch overlay {
         case is MKCircle:
-            let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
-            circleRenderer.strokeColor = UIColor.blue
-            circleRenderer.lineWidth = 1
-
-            return circleRenderer
+            mkCircleRenderer = GeofenceMKCircleRenderer(circle: overlay as! MKCircle)
+            mkCircleRenderer!.delegate = self
+            return mkCircleRenderer!
         case let polyline as MKPolyline:
             let renderer = MKPolylineRenderer(polyline: polyline)
             renderer.strokeColor = .yellow
@@ -337,5 +428,11 @@ extension ViewController: MKMapViewDelegate {
         default:
             return MKOverlayRenderer(overlay: overlay)
         }
+    }
+}
+
+extension ViewController : GeofenceMKCircleRendererDelegate {
+    func onRadiusChange(radius: Double) {
+        self.radius = radius
     }
 }
