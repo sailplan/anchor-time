@@ -1,12 +1,10 @@
-# AnchorWatch
+# Anchor Time
 
-An iOS app that alerts you if your anchor is dragging
+> Easy & reliable anchor alarm
 
-> **Heads Up!** This app is still very much a work in progress. Check out the [open issues](https://github.com/bkeepers/anchor-watch/issues) if you would like to contribute. 
+[![](https://user-images.githubusercontent.com/173/53518478-bc4a4480-3a96-11e9-95a6-eff4502c9664.png)](https://itunes.apple.com/us/app/anchor-time/id1454388591)
 
-## Mockups
-
-These are some initial mockups of how the app will work. These will be updated with real screenshots when the app fully functional.
+Anchor Time is an iOS app that alerts you if your anchor is dragging.
 
 <table>
     <tr>
@@ -14,8 +12,8 @@ These are some initial mockups of how the app will work. These will be updated w
         <th width="50%">Set the anchor</th>
     </tr>
     <tr>
-        <td><img src="https://user-images.githubusercontent.com/173/43473245-9f964cbe-94bd-11e8-998e-7b465caa27a8.png"></td>
-        <td><img src="https://user-images.githubusercontent.com/173/43473243-9f827ed2-94bd-11e8-8fda-09f73086b643.png"></td>
+        <td><img src="https://user-images.githubusercontent.com/173/53518730-45fa1200-3a97-11e9-8b67-0734fdcaeb07.png"></td>
+        <td><img src="https://user-images.githubusercontent.com/173/53518767-590ce200-3a97-11e9-8508-9eec02266ed4.png"></td>
     </tr>
     <tr>
         <td>Drop the anchor on your current location or move the map to a different location if you already dropped the anchor and forgot to mark.</td>
@@ -29,8 +27,8 @@ These are some initial mockups of how the app will work. These will be updated w
         <th width="50%">Get alerted when dragging</th>
     </tr>
     <tr>
-        <td><img src="https://user-images.githubusercontent.com/173/43473242-9f700b12-94bd-11e8-87ee-9568554a4ac9.png"></td>
-        <td><img src="https://user-images.githubusercontent.com/173/43473240-9f5dff80-94bd-11e8-834e-adb48cc324ce.png"></td>
+        <td><img src="https://user-images.githubusercontent.com/173/53518808-717cfc80-3a97-11e9-9d75-ca8f24af1de5.png"></td>
+        <td><img src="https://user-images.githubusercontent.com/173/53518817-76da4700-3a97-11e9-8be7-1488aea09734.png"></td>
     </tr>
     <tr>
         <td>Watch your drift as you are at anchor.</td>
