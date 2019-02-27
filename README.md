@@ -1,8 +1,6 @@
-# Anchor Time
+# Anchor Time [<img src="https://user-images.githubusercontent.com/173/53519438-e6046b00-3a98-11e9-978c-7b34ab90efb4.png" width="120" height="40">](https://itunes.apple.com/us/app/anchor-time/id1454388591)
 
 > Easy & reliable anchor alarm
-
-[![](https://user-images.githubusercontent.com/173/53518478-bc4a4480-3a96-11e9-95a6-eff4502c9664.png)](https://itunes.apple.com/us/app/anchor-time/id1454388591)
 
 Anchor Time is an iOS app that alerts you if your anchor is dragging.
 
