@@ -52,7 +52,6 @@ class ViewController: UIViewController {
         self.view.addSubview(alarm.volumeView)
 
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: .volumeDidChange, object: nil)
 
         UIDevice.current.isBatteryMonitoringEnabled = true
         NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange(_:)), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
@@ -155,11 +154,6 @@ class ViewController: UIViewController {
         if (batteryLevel <= 0.1) {
             activateAlarm()
         }
-    }
-
-    @objc func volumeDidChange(_ notification:Notification) {
-        print("Volume buttons pressed")
-        alarm.stop()
     }
 
     //MARK: - View concerns
