@@ -8,9 +8,15 @@ class ViewController: UIViewController {
     let alarm = Alarm()
     let notificationCenter = UNUserNotificationCenter.current()
 
+    var notificationContent: UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.body = "Your anchor is dragging!"
+        content.sound = UNNotificationSound.defaultCriticalSound(withAudioVolume: 1.0)
+        return content
+    }
+
     var anchorage: Anchorage?
     var circle: MKCircle?
-
 
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -25,13 +31,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var anchorBearingLabel: UILabel!
     @IBOutlet weak var anchorDistanceLabel: UILabel!
     @IBOutlet weak var userTrackingModeButton: UIButton!
-
-    var notificationContent: UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-        content.body = "Your anchor is dragging!"
-        content.sound = UNNotificationSound.defaultCriticalSound(withAudioVolume: 1.0)
-        return content
-    }
 
     //MARK: - Life cycle
 
@@ -63,19 +62,8 @@ class ViewController: UIViewController {
         updateUI()
     }
 
-    //MARK: - App logic
+    //MARK: - Actions
 
-    @objc func didChangeState(_ notification:Notification) {
-        switch anchorage!.state {
-        case .dragging:
-            deliverNotification()
-            activateAlarm()
-        default:
-            print("Anchorage state changed", anchorage!.state)
-            // no worries
-        }
-    }
-    
     @IBAction func dropAnchor(_ sender: Any) {
         anchorage = Anchorage(coordinate: mapView.centerCoordinate)
         // Ensure anchorage includes current location to start
@@ -87,27 +75,13 @@ class ViewController: UIViewController {
         renderAnchorage()
         updateUI()
     }
-    
+
     @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
         print("Anchor set", anchorage.coordinate, anchorage.radius)
 
         updateUI()
-    }
-
-    func deliverNotification() {
-        let request = UNNotificationRequest(
-            identifier: "dragging",
-            content: notificationContent,
-            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        )
-
-        notificationCenter.add(request) { error in
-            if let error = error {
-                print("Error: \(error)")
-            }
-        }
     }
 
     @IBAction func cancel(_ sender: Any) {
@@ -136,91 +110,19 @@ class ViewController: UIViewController {
         mapView.setUserTrackingMode(.follow, animated: true)
     }
 
-    func renderAnchorage() {
-        guard let anchorage = self.anchorage else { return }
-        
-        // Add anchorage to the map
-        mapView.addAnnotation(anchorage)
-        
-        renderCircle()
-    }
-    
-    func renderCircle() {
-        guard let anchorage = self.anchorage else { return }
+    //MARK: - Observers
 
-        if (circle != nil) {
-            mapView.removeOverlay(circle!)
-        }
-        
-        circle = anchorage.circle
-        mapView.addOverlay(circle!)
-
-        anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
-        anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
-    }
-    
-    func updateLocation(location: CLLocation) {
-        gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
-
-        guard let anchorage = self.anchorage else { return }
-
-        if let lastLocation = anchorage.locations.last {
-            let coordinates = [lastLocation.coordinate, location.coordinate]
-            mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
-        }
-        
-        anchorBearingLabel.text = FormatDisplay.degrees(anchorage.bearingFrom(location.coordinate))
-        anchorDistanceLabel.text = FormatDisplay.distance(anchorage.distanceTo(location))
-        anchorage.track(location)
-
-        switch anchorage.state {
-        case .dropped:
-            anchorage.widen(location)
-            renderCircle()
-            scrollAnchorageIntoView()
-        case .set:
-            anchorage.check(location)
+    @objc func didChangeState(_ notification:Notification) {
+        switch anchorage!.state {
         case .dragging:
-            // TODO: already dragging
-            break
+            deliverNotification()
+            activateAlarm()
+        default:
+            print("Anchorage state changed", anchorage!.state)
+            // no worries
         }
     }
 
-    func updateUI() {
-        if let anchorage = self.anchorage {
-            dashboardView.isHidden = false
-            dropAnchorButton.isHidden = true
-            userTrackingModeButton.superview!.isHidden = true
-
-            setButton.isHidden = anchorage.state != .dropped
-            stopButton.isHidden = anchorage.state != .set
-            cancelButton.isHidden = anchorage.state == .set
-
-            // Stop following user's current location
-            mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-            mapView.isZoomEnabled = false
-            mapView.isScrollEnabled = anchorage.state != .set
-
-            scrollAnchorageIntoView()
-        } else {
-            dashboardView.isHidden = true
-            dropAnchorButton.isHidden = false
-            userTrackingModeButton.superview!.isHidden = false
-
-            // Start following user's current location
-            mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
-            mapView.isZoomEnabled = true
-            mapView.isScrollEnabled = true
-        }
-    }
-
-    func scrollAnchorageIntoView() {
-        guard let anchorage = anchorage else { return }
-
-        // Center map on anchorage
-        mapView.setRegion(mapView.regionThatFits(anchorage.region), animated: true)
-    }
-    
     // Trigger a notification if battery gets low
     @objc func batteryLevelDidChange(_ notification:Notification) {
         // Do nothing if anchorage is not set
@@ -260,6 +162,109 @@ class ViewController: UIViewController {
         alarm.stop()
     }
 
+    //MARK: - View concerns
+
+    func renderAnchorage() {
+        guard let anchorage = self.anchorage else { return }
+        
+        // Add anchorage to the map
+        mapView.addAnnotation(anchorage)
+        
+        renderCircle()
+    }
+    
+    func renderCircle() {
+        guard let anchorage = self.anchorage else { return }
+
+        if (circle != nil) {
+            mapView.removeOverlay(circle!)
+        }
+        
+        circle = anchorage.circle
+        mapView.addOverlay(circle!)
+
+        anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
+        anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
+    }
+
+    func updateUI() {
+        if let anchorage = self.anchorage {
+            dashboardView.isHidden = false
+            dropAnchorButton.isHidden = true
+            userTrackingModeButton.superview!.isHidden = true
+
+            setButton.isHidden = anchorage.state != .dropped
+            stopButton.isHidden = anchorage.state != .set
+            cancelButton.isHidden = anchorage.state == .set
+
+            // Stop following user's current location
+            mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+            mapView.isZoomEnabled = false
+            mapView.isScrollEnabled = anchorage.state != .set
+
+            scrollAnchorageIntoView()
+        } else {
+            dashboardView.isHidden = true
+            dropAnchorButton.isHidden = false
+            userTrackingModeButton.superview!.isHidden = false
+
+            // Start following user's current location
+            mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
+            mapView.isZoomEnabled = true
+            mapView.isScrollEnabled = true
+        }
+    }
+
+    func scrollAnchorageIntoView() {
+        guard let anchorage = anchorage else { return }
+
+        // Center map on anchorage
+        mapView.setRegion(mapView.regionThatFits(anchorage.region), animated: true)
+    }
+
+    //MARK: - App Logic
+
+    func updateLocation(location: CLLocation) {
+        gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
+
+        guard let anchorage = self.anchorage else { return }
+
+        if let lastLocation = anchorage.locations.last {
+            let coordinates = [lastLocation.coordinate, location.coordinate]
+            mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
+        }
+        
+        anchorBearingLabel.text = FormatDisplay.degrees(anchorage.bearingFrom(location.coordinate))
+        anchorDistanceLabel.text = FormatDisplay.distance(anchorage.distanceTo(location))
+        anchorage.track(location)
+
+        switch anchorage.state {
+        case .dropped:
+            anchorage.widen(location)
+            renderCircle()
+            scrollAnchorageIntoView()
+        case .set:
+            anchorage.check(location)
+        case .dragging:
+            // TODO: already dragging
+            break
+        }
+    }
+
+    func deliverNotification() {
+        let request = UNNotificationRequest(
+            identifier: "dragging",
+            content: notificationContent,
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        )
+
+        notificationCenter.add(request) { error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
+    }
+
     func activateAlarm() {
         let alertController = UIAlertController(
             title: "Anchor dragging",
@@ -274,13 +279,6 @@ class ViewController: UIViewController {
         present(alertController, animated: true)
 
         alarm.start()
-    }
-
-    func showAlert(withTitle title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
     }
 }
 
