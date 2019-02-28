@@ -1,4 +1,4 @@
-# Anchor Time [<img src="https://user-images.githubusercontent.com/173/53519438-e6046b00-3a98-11e9-978c-7b34ab90efb4.png" width="120" height="40">](https://itunes.apple.com/us/app/anchor-time/id1454388591)
+# Anchor Time [<img src="https://user-images.githubusercontent.com/173/53519438-e6046b00-3a98-11e9-978c-7b34ab90efb4.png" width="96" height="32">](https://itunes.apple.com/us/app/anchor-time/id1454388591)
 
 > Easy & reliable anchor alarm
 
