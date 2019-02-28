@@ -65,10 +65,12 @@ class ViewController: UIViewController {
 
     @IBAction func dropAnchor(_ sender: Any) {
         anchorage = Anchorage(coordinate: mapView.centerCoordinate)
-        // Ensure anchorage includes current location to start
-        anchorage!.widen(locationManager.location!)
-
         print("Anchor dropped", anchorage!.coordinate)
+
+        // Ensure anchorage includes current location to start
+        if let location = locationManager.location {
+            anchorage!.widen(location)
+        }
 
         locationManager.startUpdatingLocation()
         renderAnchorage()
