@@ -17,6 +17,7 @@ class ViewController: UIViewController {
 
     var anchorage: Anchorage?
     var circle: MKCircle?
+    var dashboardConstraint: NSLayoutConstraint!
 
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -56,9 +57,18 @@ class ViewController: UIViewController {
         UIDevice.current.isBatteryMonitoringEnabled = true
         NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange(_:)), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
 
+        // Move dashboard off bottom of the screen
+        dashboardConstraint = dashboardView.topAnchor.constraint(equalTo: view.bottomAnchor)
+        dashboardConstraint.isActive = true
+
+        dashboardView.layer.shadowColor = UIColor.black.cgColor
+        dashboardView.layer.shadowOpacity = 0.4
+        dashboardView.layer.shadowOffset = CGSize.zero
+        dashboardView.layer.shadowRadius = 4
+
         self.anchorage = Anchorage.load()
         renderAnchorage()
-        updateUI()
+        updateUI(animated: false)
     }
 
     //MARK: - Actions
@@ -183,11 +193,18 @@ class ViewController: UIViewController {
         anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
     }
 
-    func updateUI() {
+    func updateUI(animated: Bool = true) {
+        UIView.setAnimationsEnabled(animated)
+
         if let anchorage = self.anchorage {
-            dashboardView.isHidden = false
+            dashboardConstraint.isActive = false
             dropAnchorButton.isHidden = true
-            userTrackingModeButton.superview!.isHidden = true
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.userTrackingModeButton.superview!.alpha = 0
+            }) { (finished) in
+                self.userTrackingModeButton.superview!.isHidden = true
+            }
 
             setButton.isHidden = anchorage.state != .dropped
             stopButton.isHidden = anchorage.state != .set
@@ -200,15 +217,27 @@ class ViewController: UIViewController {
 
             scrollAnchorageIntoView()
         } else {
-            dashboardView.isHidden = true
+            dashboardConstraint.isActive = true
             dropAnchorButton.isHidden = false
-            userTrackingModeButton.superview!.isHidden = false
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.userTrackingModeButton.superview!.alpha = 1
+            }) { (finished) in
+                self.userTrackingModeButton.superview!.isHidden = false
+            }
 
             // Start following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
             mapView.isZoomEnabled = true
             mapView.isScrollEnabled = true
         }
+
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+
+        // Always re-enable animations
+        UIView.setAnimationsEnabled(true)
     }
 
     func scrollAnchorageIntoView() {
