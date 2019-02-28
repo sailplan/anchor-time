@@ -39,6 +39,8 @@ class Alarm {
         }
 
         player?.play()
+        startVibrating()
+
         isActive = true
     }
 
@@ -47,7 +49,16 @@ class Alarm {
         guard isActive else { return }
 
         print("Stopping alarm")
+
+        stopVibrating()
         player?.stop()
+
+        do {
+            try audioSession.setActive(false, options: [])
+        } catch {
+            print("Failed to deactivate audio session", error.localizedDescription)
+        }
+
         isActive = false
     }
 
@@ -63,5 +74,23 @@ class Alarm {
                 self.stop()
             }
         }
+    }
+
+    func startVibrating() {
+        // Vibrate once
+        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+
+        // Repeatedly vibrate after first one finishes
+        AudioServicesAddSystemSoundCompletion(SystemSoundID(kSystemSoundID_Vibrate), nil, nil, { (_:SystemSoundID, _:UnsafeMutableRawPointer?) -> Void in
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200), execute: {
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            })
+
+        }, nil)
+    }
+
+    func stopVibrating() {
+        AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate)
     }
 }
