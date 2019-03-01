@@ -14,7 +14,7 @@ protocol GeofenceMKCircleRendererDelegate {
 class GeofenceMKCircleRenderer: MKCircleRenderer {
     // Visual properties
     var border = 3.0
-    var thumbRadius = 15.0
+    var thumbRadius = 8.0
     var radiusLineWidth = 3.0
     var fenceBorderColor = DEFAULT_COLOR.withAlphaComponent(0.6)
     var fenceBackgroundColor = DEFAULT_COLOR.withAlphaComponent(0.5)
@@ -76,8 +76,11 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
             context.addArc(center: CGPoint(x: xPos, y: yPos), radius: CGFloat(rad) , startAngle: 0, endAngle: CGFloat(2*Double.pi), clockwise: true)
             context.drawPath(using: CGPathDrawingMode.fill)
 
+            // Get bounds of thumb for drag target
             let thumbRect = CGRect(x: xPos-CGFloat(rad*2), y: yPos-CGFloat(rad*2), width: CGFloat(rad)*4, height: CGFloat(rad)*4)
-            self.thumbBounds = self.mapRect(for: thumbRect)
+            let mapRect = self.mapRect(for: thumbRect)
+            // Double size to make it easier to grab
+            thumbBounds = mapRect.insetBy(dx: -mapRect.width, dy: -mapRect.height)
 
             // Draw radius dashed line
             let patternWidth = 2 / CGFloat(zoomScale)
