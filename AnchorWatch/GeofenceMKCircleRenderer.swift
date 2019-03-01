@@ -1,10 +1,6 @@
-//
-//  GeofenceMKCircleRenderer.swift
-//  ResizableGeofence
-//
-//  Created by Siddharth Paneri on 05/06/18.
-//  Copyright © 2018 Siddharth Paneri. All rights reserved.
-//
+// Copyright (c) 2018 SiddharthPaneri
+// License: MIT
+// https://github.com/siddharth-paneri/Resizable-Geofence
 
 import UIKit
 import MapKit
