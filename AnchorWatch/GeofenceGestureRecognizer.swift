@@ -17,8 +17,6 @@ class GeofenceGestureRecognizer: UIGestureRecognizer {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         self.touchesBeganCallback(touches, event)
-    
-        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -31,7 +29,6 @@ class GeofenceGestureRecognizer: UIGestureRecognizer {
     
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
-        
     }
     
     override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
