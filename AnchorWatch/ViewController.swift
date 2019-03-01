@@ -52,8 +52,6 @@ class ViewController: UIViewController {
             }) { (finished) in
                 self.userTrackingModeButton.superview?.isHidden = !self.isMapInteractive
             }
-
-
         }
     }
 
@@ -164,7 +162,7 @@ class ViewController: UIViewController {
         if anchorage?.state == .dropped, let location = locationManager.location {
             mapView.centerCoordinate = location.coordinate
         } else {
-            mapView.setUserTrackingMode(.follow, animated: false)
+            mapView.setUserTrackingMode(.follow, animated: true)
         }
     }
 
