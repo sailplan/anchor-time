@@ -36,6 +36,11 @@ class ViewController: UIViewController {
             self.mapView.isScrollEnabled = !isResizing
         }
     }
+    var allowsResizing: Bool {
+        get {
+            return anchorage?.state == .dropped
+        }
+    }
 
     fileprivate var lastMapPoint : MKMapPoint? = nil
     fileprivate var oldFenceRadius : Double = 0.0
@@ -114,6 +119,7 @@ class ViewController: UIViewController {
         anchorage.set()
         print("Anchor set", anchorage.coordinate, radius)
 
+        renderCircle()
         updateUI()
     }
 
@@ -416,6 +422,7 @@ extension ViewController: MKMapViewDelegate {
         case is MKCircle:
             mkCircleRenderer = GeofenceMKCircleRenderer(circle: overlay as! MKCircle)
             mkCircleRenderer!.delegate = self
+            mkCircleRenderer!.isResizeable = self.allowsResizing
             return mkCircleRenderer!
         case let polyline as MKPolyline:
             let renderer = MKPolylineRenderer(polyline: polyline)

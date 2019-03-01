@@ -29,6 +29,13 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
             invalidatePath()
         }
     }
+
+    var isResizeable = true {
+        didSet {
+            invalidatePath()
+        }
+    }
+
     var delegate : GeofenceMKCircleRendererDelegate?
     var thumbBounds : MKMapRect?
 
@@ -56,32 +63,34 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
         context.addArc(center: overlayRect.origin, radius: CGFloat(radiusAtLatitude), startAngle: 0, endAngle: CGFloat(2*Double.pi), clockwise: true)
         context.drawPath(using: .fillStroke)
 
-        // Draw thumb on right
-        let xPos = overlayRect.origin.x + CGFloat(radiusAtLatitude)
-        let yPos = overlayRect.origin.y
-        let thumbPoint = CGPoint(x: xPos, y: yPos)
-        context.setStrokeColor(self.fenceThumbColor.cgColor)
-        context.setFillColor(self.fenceThumbColor.cgColor)
-        let rad = self.thumbRadius / Double(zoomScale)
-        let radLineWidth = self.radiusLineWidth / Double(zoomScale)
-        context.setShouldAntialias(true)
-        context.addArc(center: CGPoint(x: xPos, y: yPos), radius: CGFloat(rad) , startAngle: 0, endAngle: CGFloat(2*Double.pi), clockwise: true)
-        context.drawPath(using: CGPathDrawingMode.fill)
+        if(isResizeable) {
+            // Draw thumb on right
+            let xPos = overlayRect.origin.x + CGFloat(radiusAtLatitude)
+            let yPos = overlayRect.origin.y
+            let thumbPoint = CGPoint(x: xPos, y: yPos)
+            context.setStrokeColor(self.fenceThumbColor.cgColor)
+            context.setFillColor(self.fenceThumbColor.cgColor)
+            let rad = self.thumbRadius / Double(zoomScale)
+            let radLineWidth = self.radiusLineWidth / Double(zoomScale)
+            context.setShouldAntialias(true)
+            context.addArc(center: CGPoint(x: xPos, y: yPos), radius: CGFloat(rad) , startAngle: 0, endAngle: CGFloat(2*Double.pi), clockwise: true)
+            context.drawPath(using: CGPathDrawingMode.fill)
 
-        let thumbRect = CGRect(x: xPos-CGFloat(rad*2), y: yPos-CGFloat(rad*2), width: CGFloat(rad)*4, height: CGFloat(rad)*4)
-        self.thumbBounds = self.mapRect(for: thumbRect)
+            let thumbRect = CGRect(x: xPos-CGFloat(rad*2), y: yPos-CGFloat(rad*2), width: CGFloat(rad)*4, height: CGFloat(rad)*4)
+            self.thumbBounds = self.mapRect(for: thumbRect)
 
-        // Draw radius dashed line
-        let patternWidth = 2 / CGFloat(zoomScale)
-        context.setLineWidth(CGFloat(radLineWidth))
-        context.setStrokeColor(self.fenceRadiusColor.cgColor)
-        context.move(to: overlayRect.origin)
-        context.setShouldAntialias(true)
-        context.addLine(to: thumbPoint)
-        context.setLineDash(phase: 0, lengths: [CGFloat(patternWidth), CGFloat(patternWidth * 4)])
-        context.setLineCap(CGLineCap.round)
-        context.drawPath(using: CGPathDrawingMode.stroke)
-
-        UIGraphicsPopContext()
+            // Draw radius dashed line
+            let patternWidth = 2 / CGFloat(zoomScale)
+            context.setLineWidth(CGFloat(radLineWidth))
+            context.setStrokeColor(self.fenceRadiusColor.cgColor)
+            context.move(to: overlayRect.origin)
+            context.setShouldAntialias(true)
+            context.addLine(to: thumbPoint)
+            context.setLineDash(phase: 0, lengths: [CGFloat(patternWidth), CGFloat(patternWidth * 4)])
+            context.setLineCap(CGLineCap.round)
+            context.drawPath(using: CGPathDrawingMode.stroke)
+        } else {
+            self.thumbBounds = nil
+        }
     }
 }
