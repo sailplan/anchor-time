@@ -19,6 +19,46 @@ class ViewController: UIViewController {
     var circle: MKCircle?
     var dashboardConstraint: NSLayoutConstraint!
 
+    var radius: CLLocationDistance {
+        get {
+            return anchorage?.radius ?? 0
+        }
+
+        set {
+            print("Changed anchorage radius to", radius)
+            anchorage?.radius = newValue
+            scrollAnchorageIntoView()
+        }
+    }
+
+    var mkCircleRenderer : GeofenceMKCircleRenderer?
+    var isResizing : Bool = false {
+        didSet {
+            self.mapView.isScrollEnabled = !isResizing
+        }
+    }
+    var allowsResizing: Bool {
+        get {
+            return anchorage?.state == .dropped
+        }
+    }
+
+    var isMapInteractive: Bool = false {
+        didSet {
+            mapView.isZoomEnabled = isMapInteractive
+            mapView.isScrollEnabled = isMapInteractive
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.userTrackingModeButton.superview?.alpha = self.isMapInteractive ? 1 : 0
+            }) { (finished) in
+                self.userTrackingModeButton.superview?.isHidden = !self.isMapInteractive
+            }
+        }
+    }
+
+    fileprivate var lastMapPoint : MKMapPoint? = nil
+    fileprivate var oldFenceRadius : Double = 0.0
+
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var dropAnchorButton: UIView!
@@ -69,6 +109,7 @@ class ViewController: UIViewController {
         self.anchorage = Anchorage.load()
         renderAnchorage()
         updateUI(animated: false)
+        addGestureRecognizer()
     }
 
     //MARK: - Actions
@@ -90,8 +131,9 @@ class ViewController: UIViewController {
     @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
-        print("Anchor set", anchorage.coordinate, anchorage.radius)
+        print("Anchor set", anchorage.coordinate, radius)
 
+        renderCircle()
         updateUI()
     }
 
@@ -118,7 +160,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func followUserTapped() {
-        mapView.setUserTrackingMode(.follow, animated: true)
+        if anchorage?.state == .dropped, let location = locationManager.location {
+            mapView.centerCoordinate = location.coordinate
+        } else {
+            mapView.setUserTrackingMode(.follow, animated: true)
+        }
     }
 
     //MARK: - Observers
@@ -172,25 +218,25 @@ class ViewController: UIViewController {
 
     func renderAnchorage() {
         guard let anchorage = self.anchorage else { return }
-        
+
         // Add anchorage to the map
         mapView.addAnnotation(anchorage)
-        
+
         renderCircle()
     }
-    
+
     func renderCircle() {
         guard let anchorage = self.anchorage else { return }
 
         if (circle != nil) {
             mapView.removeOverlay(circle!)
         }
-        
+
         circle = anchorage.circle
         mapView.addOverlay(circle!)
 
         anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
-        anchorageRadiusLabel.text = FormatDisplay.distance(anchorage.radius)
+        anchorageRadiusLabel.text = FormatDisplay.distance(radius)
     }
 
     func updateUI(animated: Bool = true) {
@@ -200,37 +246,23 @@ class ViewController: UIViewController {
             dashboardConstraint.isActive = false
             dropAnchorButton.isHidden = true
 
-            UIView.animate(withDuration: 0.2, animations: {
-                self.userTrackingModeButton.superview!.alpha = 0
-            }) { (finished) in
-                self.userTrackingModeButton.superview!.isHidden = true
-            }
-
             setButton.isHidden = anchorage.state != .dropped
             stopButton.isHidden = anchorage.state != .set
             cancelButton.isHidden = anchorage.state == .set
 
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-            mapView.isZoomEnabled = false
-            mapView.isScrollEnabled = anchorage.state != .set
 
             scrollAnchorageIntoView()
         } else {
             dashboardConstraint.isActive = true
             dropAnchorButton.isHidden = false
 
-            UIView.animate(withDuration: 0.2, animations: {
-                self.userTrackingModeButton.superview!.alpha = 1
-            }) { (finished) in
-                self.userTrackingModeButton.superview!.isHidden = false
-            }
-
             // Start following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
-            mapView.isZoomEnabled = true
-            mapView.isScrollEnabled = true
         }
+
+        self.isMapInteractive = anchorage == nil || anchorage?.state == .dropped
 
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -258,7 +290,7 @@ class ViewController: UIViewController {
             let coordinates = [lastLocation.coordinate, location.coordinate]
             mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
         }
-        
+
         anchorBearingLabel.text = FormatDisplay.degrees(anchorage.bearingFrom(location.coordinate))
         anchorDistanceLabel.text = FormatDisplay.distance(anchorage.distanceTo(location))
         anchorage.track(location)
@@ -305,6 +337,52 @@ class ViewController: UIViewController {
 
         alarm.start()
     }
+
+    func addGestureRecognizer() {
+        let gestureRecognizer = GeofenceGestureRecognizer()
+        self.mapView.addGestureRecognizer(gestureRecognizer)
+
+        gestureRecognizer.touchesBeganCallback = { ( touches: Set<UITouch>, event : UIEvent) in
+            guard let mkCircleRenderer = self.mkCircleRenderer,
+                let thumbMapRect = mkCircleRenderer.thumbBounds,
+                let touch = touches.first
+                else { return }
+
+            let pointOnMapView = touch.location(in: self.mapView)
+            let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
+            let mapPoint = MKMapPoint(coordinateFromPoint)
+
+            // Check that touch is on thumb
+            if thumbMapRect.contains(mapPoint) {
+                self.isResizing = true
+                self.oldFenceRadius = mkCircleRenderer.radius
+                self.lastMapPoint = mapPoint
+            }
+        }
+
+        gestureRecognizer.touchesMovedCallback = { ( touches: Set<UITouch>, event : UIEvent) in
+            // Only perform resize if resizing is active and there's one touch
+            guard self.isResizing && touches.count == 1,
+                let touch = touches.first,
+                let lastPoint = self.lastMapPoint
+                else { return }
+
+            let pointOnMapView = touch.location(in: self.mapView)
+            let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
+            let mapPoint = MKMapPoint(coordinateFromPoint)
+
+            let distance = (mapPoint.x - lastPoint.x) / MKMapPointsPerMeterAtLatitude(coordinateFromPoint.latitude) + self.oldFenceRadius
+            if distance > 0 {
+                self.mkCircleRenderer?.radius = distance
+            }
+        }
+
+        gestureRecognizer.touchesEndedCallback = { ( touches: Set<UITouch>, event : UIEvent) in
+            guard self.isResizing && touches.count == 1 else { return }
+            self.isResizing = false
+        }
+    }
+
 }
 
 //MARK: - Core Location
@@ -346,12 +424,10 @@ extension ViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         switch overlay {
         case is MKCircle:
-            let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
-            circleRenderer.strokeColor = UIColor.blue
-            circleRenderer.lineWidth = 1
-
-            return circleRenderer
+            mkCircleRenderer = GeofenceMKCircleRenderer(circle: overlay as! MKCircle)
+            mkCircleRenderer!.delegate = self
+            mkCircleRenderer!.isResizeable = self.allowsResizing
+            return mkCircleRenderer!
         case let polyline as MKPolyline:
             let renderer = MKPolylineRenderer(polyline: polyline)
             renderer.strokeColor = .yellow
@@ -360,5 +436,11 @@ extension ViewController: MKMapViewDelegate {
         default:
             return MKOverlayRenderer(overlay: overlay)
         }
+    }
+}
+
+extension ViewController : GeofenceMKCircleRendererDelegate {
+    func onRadiusChange(radius: Double) {
+        self.radius = radius
     }
 }

@@ -24,6 +24,8 @@
 		7EB6ABA0210DF3E700C97117 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB6AB9F210DF3E700C97117 /* MapKit.framework */; };
 		7EB737BB222597FE00E7D1F0 /* RondeIsland.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */; };
 		7EB737BD22265F5D00E7D1F0 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB737BC22265F5D00E7D1F0 /* Alarm.swift */; };
+		7EB737BF2226C6DA00E7D1F0 /* GeofenceMKCircleRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB737BE2226C6DA00E7D1F0 /* GeofenceMKCircleRenderer.swift */; };
+		7EB737C12226C6E300E7D1F0 /* GeofenceGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB737C02226C6E300E7D1F0 /* GeofenceGestureRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		7EB6AB9F210DF3E700C97117 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = RondeIsland.gpx; sourceTree = "<group>"; };
 		7EB737BC22265F5D00E7D1F0 /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		7EB737BE2226C6DA00E7D1F0 /* GeofenceMKCircleRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeofenceMKCircleRenderer.swift; sourceTree = "<group>"; };
+		7EB737C02226C6E300E7D1F0 /* GeofenceGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeofenceGestureRecognizer.swift; sourceTree = "<group>"; };
 		7ED7EC532110C68400C7ACC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7ED7EC542110D50000C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; name = mockups.sketch; path = ../../../../Desktop/mockups.sketch; sourceTree = "<group>"; };
 		7ED7EC552110D50A00C7ACC6 /* mockups.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockups.sketch; sourceTree = "<group>"; };
@@ -125,6 +129,8 @@
 		7EB6AB6F210DF3D700C97117 /* AnchorWatch */ = {
 			isa = PBXGroup;
 			children = (
+				7EB737BE2226C6DA00E7D1F0 /* GeofenceMKCircleRenderer.swift */,
+				7EB737C02226C6E300E7D1F0 /* GeofenceGestureRecognizer.swift */,
 				7EB6AB70210DF3D700C97117 /* AppDelegate.swift */,
 				7EB737BC22265F5D00E7D1F0 /* Alarm.swift */,
 				7EB6AB72210DF3D700C97117 /* ViewController.swift */,
@@ -327,9 +333,11 @@
 				7E64C58421C15F7900735B73 /* Notification.swift in Sources */,
 				7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */,
 				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
+				7EB737C12226C6E300E7D1F0 /* GeofenceGestureRecognizer.swift in Sources */,
 				7EA86C9921DBF4D100D51CF4 /* FormatDisplay.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,
 				7EB737BD22265F5D00E7D1F0 /* Alarm.swift in Sources */,
+				7EB737BF2226C6DA00E7D1F0 /* GeofenceMKCircleRenderer.swift in Sources */,
 				7EA86C9B21DC66A100D51CF4 /* MPVolumeView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
