@@ -25,6 +25,7 @@ class ViewController: UIViewController {
         }
 
         set {
+            print("Changed anchorage radius to", radius)
             anchorage?.radius = newValue
             scrollAnchorageIntoView()
         }
@@ -440,7 +441,6 @@ extension ViewController: MKMapViewDelegate {
 
 extension ViewController : GeofenceMKCircleRendererDelegate {
     func onRadiusChange(radius: Double) {
-        print("Manually changed anchorage radius to", radius)
         self.radius = radius
     }
 }
