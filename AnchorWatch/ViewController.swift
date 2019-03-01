@@ -26,16 +26,14 @@ class ViewController: UIViewController {
 
         set {
             anchorage?.radius = newValue
+            scrollAnchorageIntoView()
         }
     }
 
     var mkCircleRenderer : GeofenceMKCircleRenderer?
-    var isGeofenceResizingAllowed : Bool = false {
+    var isResizing : Bool = false {
         didSet {
-            if isGeofenceResizingAllowed != oldValue {
-                //                self.mapView.isRotateEnabled = !isGeofenceResizingAllowed
-                //                self.mapView.isScrollEnabled = !isGeofenceResizingAllowed
-            }
+            self.mapView.isScrollEnabled = !isResizing
         }
     }
 
@@ -212,7 +210,6 @@ class ViewController: UIViewController {
 
         circle = anchorage.circle
         mapView.addOverlay(circle!)
-        mkCircleRenderer?.set(radius: circle!.radius)
 
         anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
         anchorageRadiusLabel.text = FormatDisplay.distance(radius)
@@ -237,7 +234,7 @@ class ViewController: UIViewController {
 
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-            mapView.isZoomEnabled = false
+            mapView.isZoomEnabled = anchorage.state != .set
             mapView.isScrollEnabled = anchorage.state != .set
 
             scrollAnchorageIntoView()
@@ -334,69 +331,46 @@ class ViewController: UIViewController {
     func addGestureRecognizer() {
         let gestureRecognizer = GeofenceGestureRecognizer()
         self.mapView.addGestureRecognizer(gestureRecognizer)
+
         gestureRecognizer.touchesBeganCallback = { ( touches: Set<UITouch>, event : UIEvent) in
-            if let touch = touches.first {
-                self.mapView.isScrollEnabled = false
-                let pointOnMapView = touch.location(in: self.mapView)
-                let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
-                let mapPoint = MKMapPoint(coordinateFromPoint)
-                if let fenceRederer = self.mkCircleRenderer {
-                    if let thumbMapRect = fenceRederer.thumbBounds {
-                        /* get rect of thumb */
-                        if thumbMapRect.contains(mapPoint) {
-                            /* touched on thumb */
-                            self.isGeofenceResizingAllowed = true
-                            self.oldFenceRadius = fenceRederer.getRadius()
-                        }                    }
-                }
+            guard let mkCircleRenderer = self.mkCircleRenderer,
+                let thumbMapRect = mkCircleRenderer.thumbBounds,
+                let touch = touches.first
+                else { return }
+
+            let pointOnMapView = touch.location(in: self.mapView)
+            let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
+            let mapPoint = MKMapPoint(coordinateFromPoint)
+
+            // Check that touch is on thumb
+            if thumbMapRect.contains(mapPoint) {
+                self.isResizing = true
+                self.oldFenceRadius = mkCircleRenderer.radius
                 self.lastMapPoint = mapPoint
             }
         }
+
         gestureRecognizer.touchesMovedCallback = { ( touches: Set<UITouch>, event : UIEvent) in
-            /* if resizing is allowed and only one touch is processed perform resizing */
-            if self.isGeofenceResizingAllowed && touches.count == 1 {
+            // Only perform resize if resizing is active and there's one touch
+            guard self.isResizing && touches.count == 1,
+                let touch = touches.first,
+                let lastPoint = self.lastMapPoint
+                else { return }
 
-                if let touch = touches.first {
-                    let pointOnMapView = touch.location(in: self.mapView)
-                    let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
-                    let mapPoint = MKMapPoint(coordinateFromPoint)
+            let pointOnMapView = touch.location(in: self.mapView)
+            let coordinateFromPoint = self.mapView.convert(pointOnMapView, toCoordinateFrom: self.mapView)
+            let mapPoint = MKMapPoint(coordinateFromPoint)
 
-                    if let lastPoint = self.lastMapPoint {
-                        var meterDistance = (mapPoint.x-lastPoint.x)/MKMapPointsPerMeterAtLatitude(coordinateFromPoint.latitude)+self.oldFenceRadius
-                        if meterDistance > 0 {
-                            //                            if abs(meterDistance-self.oldFenceRadius) >= DEFAULT_STEP_RADIUS {
-                            self.mkCircleRenderer?.set(radius: meterDistance)
-                            if let rad = self.mkCircleRenderer?.getRadius() {
-                                meterDistance = rad
-                            }
-                            //                            }
-                        }
-                    }
-                }
+            let distance = (mapPoint.x - lastPoint.x) / MKMapPointsPerMeterAtLatitude(coordinateFromPoint.latitude) + self.oldFenceRadius
+            if distance > 0 {
+                self.mkCircleRenderer?.radius = distance
             }
         }
 
         gestureRecognizer.touchesEndedCallback = { ( touches: Set<UITouch>, event : UIEvent) in
-
-            if self.isGeofenceResizingAllowed && touches.count == 1 {
-                if let _ = touches.first {
-                    self.mapView.isScrollEnabled = true
-
-                    if let circleRenderer = self.mkCircleRenderer {
-                        let radius = circleRenderer.getRadius()
-                        let zoomCoordinate = circleRenderer.circle.coordinate
-                        let zoomRadius = radius*4
-                        self.mapView.setRegion(MKCoordinateRegion(center: zoomCoordinate, latitudinalMeters: zoomRadius, longitudinalMeters: zoomRadius), animated: false)
-                        circleRenderer.set(radius: radius)
-                    }
-                }
-            }
-
-
-            self.isGeofenceResizingAllowed = false
+            guard self.isResizing && touches.count == 1 else { return }
+            self.isResizing = false
         }
-
-
     }
 
 }
@@ -456,6 +430,7 @@ extension ViewController: MKMapViewDelegate {
 
 extension ViewController : GeofenceMKCircleRendererDelegate {
     func onRadiusChange(radius: Double) {
+        print("Manually changed anchorage radius to", radius)
         self.radius = radius
     }
 }

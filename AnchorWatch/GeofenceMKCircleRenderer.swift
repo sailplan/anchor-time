@@ -16,18 +16,25 @@ protocol GeofenceMKCircleRendererDelegate {
 }
 
 class GeofenceMKCircleRenderer: MKCircleRenderer {
-    var thumbBounds : MKMapRect?
+    // Visual properties
     var border = 3.0
     var thumbRadius = 15.0
     var radiusLineWidth = 3.0
-    fileprivate var radius = 0.0
-    fileprivate var mapRadius = 0.0
     var fenceBorderColor = DEFAULT_COLOR.withAlphaComponent(0.6)
     var fenceBackgroundColor = DEFAULT_COLOR.withAlphaComponent(0.5)
     var fenceThumbColor = DEFAULT_COLOR
     var fenceRadiusColor = DEFAULT_COLOR
 
+    var radius = 0.0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.delegate?.onRadiusChange(radius: self.radius)
+            }
+            invalidatePath()
+        }
+    }
     var delegate : GeofenceMKCircleRendererDelegate?
+    var thumbBounds : MKMapRect?
 
     override init(circle: MKCircle) {
         super.init(circle: circle)
@@ -39,24 +46,13 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
         self.radius = radius
     }
 
-    /** radius in meters */
-    func set(radius : Double){
-        mapRadius = radius
-        invalidatePath()
-    }
-    
-    /** radius in meters */
-    func getRadius()-> Double{
-        return mapRadius
-    }
-    
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         let mapPoint = MKMapPoint(overlay.coordinate)
-        let radiusAtLatitude = mapRadius * MKMapPointsPerMeterAtLatitude(overlay.coordinate.latitude)
-        
+        let radiusAtLatitude = radius * MKMapPointsPerMeterAtLatitude(overlay.coordinate.latitude)
         let circleBounds = MKMapRect(x: mapPoint.x, y: mapPoint.y, width: radiusAtLatitude*2, height: radiusAtLatitude*2)
-
         let overlayRect = self.rect(for: circleBounds)
+
+        // Draw circle
         context.setStrokeColor(self.fenceBorderColor.cgColor)
         context.setFillColor(self.fenceBackgroundColor.cgColor)
         context.setLineWidth(CGFloat(self.border)/zoomScale)
@@ -64,7 +60,7 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
         context.addArc(center: overlayRect.origin, radius: CGFloat(radiusAtLatitude), startAngle: 0, endAngle: CGFloat(2*Double.pi), clockwise: true)
         context.drawPath(using: .fillStroke)
 
-        // Circle thumb on right
+        // Draw thumb on right
         let xPos = overlayRect.origin.x + CGFloat(radiusAtLatitude)
         let yPos = overlayRect.origin.y
         let thumbPoint = CGPoint(x: xPos, y: yPos)
@@ -79,20 +75,17 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
         let thumbRect = CGRect(x: xPos-CGFloat(rad*2), y: yPos-CGFloat(rad*2), width: CGFloat(rad)*4, height: CGFloat(rad)*4)
         self.thumbBounds = self.mapRect(for: thumbRect)
 
-        /* create radius dashed line */
+        // Draw radius dashed line
         let patternWidth = 2 / CGFloat(zoomScale)
         context.setLineWidth(CGFloat(radLineWidth))
         context.setStrokeColor(self.fenceRadiusColor.cgColor)
-        context.move(to: thumbPoint)
+        context.move(to: overlayRect.origin)
         context.setShouldAntialias(true)
-        context.addLine(to: overlayRect.origin)
+        context.addLine(to: thumbPoint)
         context.setLineDash(phase: 0, lengths: [CGFloat(patternWidth), CGFloat(patternWidth * 4)])
         context.setLineCap(CGLineCap.round)
         context.drawPath(using: CGPathDrawingMode.stroke)
 
-        DispatchQueue.main.async {
-            self.delegate?.onRadiusChange(radius: self.mapRadius)
-        }
         UIGraphicsPopContext()
     }
 }
