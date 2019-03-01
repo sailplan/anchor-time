@@ -72,15 +72,15 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dr0-lH-WEv">
-                                <rect key="frame" x="0.0" y="489" width="375" height="198"/>
+                                <rect key="frame" x="0.0" y="488.5" width="375" height="198.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UAb-JQ-2hi">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="198.5"/>
                                         <subviews>
                                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ce-Gf-O8l">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="198.5"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="kIh-jA-Ia4">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="199"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="198.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="left" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="XxL-2d-Hqt" userLabel="Anchor properties">
@@ -265,7 +265,7 @@
                                 </constraints>
                             </view>
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bey-Qp-MtK" userLabel="Follow User">
-                                <rect key="frame" x="319" y="433" width="40" height="40"/>
+                                <rect key="frame" x="319" y="36" width="40" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AWL-T3-ehs">
                                         <rect key="frame" x="8" y="8" width="24" height="24"/>
@@ -292,7 +292,6 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="YKc-kX-KOK" firstAttribute="centerX" secondItem="Qvq-7t-SVB" secondAttribute="centerX" id="6Q7-Sw-bjl"/>
-                            <constraint firstItem="Qvq-7t-SVB" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Bey-Qp-MtK" secondAttribute="bottom" constant="16" id="8Bn-bD-wa0"/>
                             <constraint firstItem="1Pv-9Z-FpY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-40" id="8Ph-hn-lkF"/>
                             <constraint firstItem="Qvq-7t-SVB" firstAttribute="trailing" secondItem="Bey-Qp-MtK" secondAttribute="trailing" constant="16" id="KbJ-VZ-g7Z"/>
                             <constraint firstItem="Qvq-7t-SVB" firstAttribute="trailing" secondItem="YKc-kX-KOK" secondAttribute="trailing" id="Lki-tI-YNy"/>
@@ -302,7 +301,7 @@
                             <constraint firstItem="YKc-kX-KOK" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="dLh-4S-HNu"/>
                             <constraint firstItem="1Pv-9Z-FpY" firstAttribute="centerX" secondItem="Qvq-7t-SVB" secondAttribute="centerX" id="dol-P9-tla"/>
                             <constraint firstItem="dr0-lH-WEv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="eY6-WO-e2u"/>
-                            <constraint firstItem="dr0-lH-WEv" firstAttribute="top" secondItem="Bey-Qp-MtK" secondAttribute="bottom" priority="750" constant="16" id="gts-Q8-8NH"/>
+                            <constraint firstItem="Bey-Qp-MtK" firstAttribute="top" secondItem="Qvq-7t-SVB" secondAttribute="top" priority="750" constant="16" id="gts-Q8-8NH"/>
                             <constraint firstItem="YKc-kX-KOK" firstAttribute="leading" secondItem="Qvq-7t-SVB" secondAttribute="leading" id="xkH-oO-S3F"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Qvq-7t-SVB"/>

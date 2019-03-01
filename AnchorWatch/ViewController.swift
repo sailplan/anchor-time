@@ -42,6 +42,21 @@ class ViewController: UIViewController {
         }
     }
 
+    var isMapInteractive: Bool = false {
+        didSet {
+            mapView.isZoomEnabled = isMapInteractive
+            mapView.isScrollEnabled = isMapInteractive
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.userTrackingModeButton.superview?.alpha = self.isMapInteractive ? 1 : 0
+            }) { (finished) in
+                self.userTrackingModeButton.superview?.isHidden = !self.isMapInteractive
+            }
+
+
+        }
+    }
+
     fileprivate var lastMapPoint : MKMapPoint? = nil
     fileprivate var oldFenceRadius : Double = 0.0
 
@@ -146,7 +161,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func followUserTapped() {
-        mapView.setUserTrackingMode(.follow, animated: true)
+        if anchorage?.state == .dropped, let location = locationManager.location {
+            mapView.centerCoordinate = location.coordinate
+        } else {
+            mapView.setUserTrackingMode(.follow, animated: false)
+        }
     }
 
     //MARK: - Observers
@@ -228,37 +247,23 @@ class ViewController: UIViewController {
             dashboardConstraint.isActive = false
             dropAnchorButton.isHidden = true
 
-            UIView.animate(withDuration: 0.2, animations: {
-                self.userTrackingModeButton.superview!.alpha = 0
-            }) { (finished) in
-                self.userTrackingModeButton.superview!.isHidden = true
-            }
-
             setButton.isHidden = anchorage.state != .dropped
             stopButton.isHidden = anchorage.state != .set
             cancelButton.isHidden = anchorage.state == .set
 
             // Stop following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
-            mapView.isZoomEnabled = anchorage.state != .set
-            mapView.isScrollEnabled = anchorage.state != .set
 
             scrollAnchorageIntoView()
         } else {
             dashboardConstraint.isActive = true
             dropAnchorButton.isHidden = false
 
-            UIView.animate(withDuration: 0.2, animations: {
-                self.userTrackingModeButton.superview!.alpha = 1
-            }) { (finished) in
-                self.userTrackingModeButton.superview!.isHidden = false
-            }
-
             // Start following user's current location
             mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
-            mapView.isZoomEnabled = true
-            mapView.isScrollEnabled = true
         }
+
+        self.isMapInteractive = anchorage == nil || anchorage?.state == .dropped
 
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
