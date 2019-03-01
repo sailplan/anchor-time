@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-fileprivate let DEFAULT_COLOR = UIColor(red: 42 / 255.0, green: 173 / 255.0, blue: 133 / 255.0, alpha: 1.0)
+fileprivate let DEFAULT_COLOR = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
 
 protocol GeofenceMKCircleRendererDelegate {
     func onRadiusChange(radius : Double)
@@ -28,7 +28,12 @@ class GeofenceMKCircleRenderer: MKCircleRenderer {
     var fenceRadiusColor = DEFAULT_COLOR
 
     var delegate : GeofenceMKCircleRendererDelegate?
-    
+
+    override init(circle: MKCircle) {
+        super.init(circle: circle)
+        self.radius = circle.radius
+    }
+
     convenience init(circle: MKCircle, radius: Double) {
         self.init(circle: circle)
         self.radius = radius
