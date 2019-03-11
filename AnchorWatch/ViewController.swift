@@ -5,6 +5,7 @@ import UserNotifications
 class ViewController: UIViewController {
     //MARK: - Properties
     let locationManager = CLLocationManager()
+    let batteryMonitor = BatteryMonitor()
     let alarm = Alarm()
     let notificationCenter = UNUserNotificationCenter.current()
 
@@ -78,6 +79,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        batteryMonitor.delegate = self
         mapView.delegate = self
 
         locationManager.delegate = self
@@ -93,9 +95,6 @@ class ViewController: UIViewController {
         self.view.addSubview(alarm.volumeView)
 
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeState(_:)), name: .didChangeState, object: nil)
-
-        UIDevice.current.isBatteryMonitoringEnabled = true
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange(_:)), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
 
         // Move dashboard off bottom of the screen
         dashboardConstraint = dashboardView.topAnchor.constraint(equalTo: view.bottomAnchor)
@@ -182,40 +181,6 @@ class ViewController: UIViewController {
         default:
             print("Anchorage state changed", anchorage!.state)
             // no worries
-        }
-    }
-
-    // Trigger a notification if battery gets low
-    @objc func batteryLevelDidChange(_ notification:Notification) {
-        // Do nothing if anchorage is not set
-        guard anchorage?.state == .set else { return }
-
-        let batteryState = UIDevice.current.batteryState
-        let batteryLevel = UIDevice.current.batteryLevel
-
-        // Do nothing if battery is charging or is not low
-        if (batteryState == .charging || batteryLevel > 0.2) {
-            return
-        }
-
-        print("Battery low", batteryLevel)
-
-        let content = UNMutableNotificationContent()
-        content.title = "Low battery!"
-        content.body = "Plug in your device to continue monitoring your anchorage."
-        content.sound = UNNotificationSound.default
-
-        let request = UNNotificationRequest(
-            identifier: "low-battery",
-            content: content,
-            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        )
-
-        notificationCenter.add(request)
-
-        // Only play alarm if battery is critically low.
-        if (batteryLevel <= 0.1) {
-            alarm.start()
         }
     }
 
@@ -464,5 +429,33 @@ extension ViewController: MKMapViewDelegate {
 extension ViewController : GeofenceMKCircleRendererDelegate {
     func onRadiusChange(radius: Double) {
         self.radius = radius
+    }
+}
+
+extension ViewController: BatteryMonitorDelegate {
+    func isBatteryMonitoringEnabled() -> Bool {
+        return anchorage?.state == .set
+    }
+
+    func batteryLow(level: Float) {
+        print("Battery low", level)
+
+        let content = UNMutableNotificationContent()
+        content.title = "Low battery!"
+        content.body = "Plug in your device to continue monitoring your anchorage."
+        content.sound = UNNotificationSound.default
+
+        let request = UNNotificationRequest(
+            identifier: "low-battery",
+            content: content,
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        )
+
+        notificationCenter.add(request)
+    }
+
+    func batteryCritical(level: Float) {
+        batteryLow(level: level)
+        alarm.start()
     }
 }
