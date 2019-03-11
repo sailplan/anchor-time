@@ -106,7 +106,10 @@ class ViewController: UIViewController {
         dashboardView.layer.shadowRadius = 4
 
         self.anchorage = Anchorage.load()
-        renderAnchorage()
+        if anchorage != nil {
+            renderAnchorage()
+            locationManager.startUpdatingLocation()
+        }
         updateUI(animated: false)
         addGestureRecognizer()
     }
