@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E1BB0242236BDF100082522 /* SouthWaterCaye.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7E1BB0232236BDF100082522 /* SouthWaterCaye.gpx */; };
 		7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3BED15210EB5900069EE88 /* Anchorage.swift */; };
 		7E53071521BBAC5600C2EDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */; };
 		7E64C58421C15F7900735B73 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64C58321C15F7900735B73 /* Notification.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E1BB0232236BDF100082522 /* SouthWaterCaye.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SouthWaterCaye.gpx; sourceTree = "<group>"; };
 		7E3BED15210EB5900069EE88 /* Anchorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
 		7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		7E64C58321C15F7900735B73 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 		7EB6AB84210DF3D800C97117 /* AnchorWatchTests */ = {
 			isa = PBXGroup;
 			children = (
+				7E1BB0232236BDF100082522 /* SouthWaterCaye.gpx */,
 				7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */,
 				7EB737BA222597FE00E7D1F0 /* RondeIsland.gpx */,
 				7EB6AB85210DF3D800C97117 /* AnchorWatchTests.swift */,
@@ -313,6 +316,7 @@
 			files = (
 				7E68E0B02112240600B44FFE /* LakeCharlevoix.gpx in Resources */,
 				7EB737BB222597FE00E7D1F0 /* RondeIsland.gpx in Resources */,
+				7E1BB0242236BDF100082522 /* SouthWaterCaye.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
