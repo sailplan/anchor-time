@@ -66,8 +66,8 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
             print("Horrizontal accuracy is not precise enough, ignoring", location)
         } else if(location.timestamp.timeIntervalSinceNow > 10) {
             print("Ignoring old location", location)
-        } else if previous != nil && previous!.distance(from: location) <= location.horizontalAccuracy * 0.25 {
-            print("New location is too close to previous to bother tracking.", (previous: previous!, new: location))
+        } else if let distance = previous?.distance(from: location), distance <= location.horizontalAccuracy * 0.25 {
+            print("New location is not significant enough to track.", (distance: distance, accuracy: location.horizontalAccuracy))
         } else {
             self.locations.append(location)
             return (previous: previous, new: location)
