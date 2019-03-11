@@ -410,6 +410,12 @@ extension ViewController: MKMapViewDelegate {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         guard let anchorage = anchorage else { return }
         anchorage.coordinate = mapView.centerCoordinate
+
+        // Ensure anchorage includes current location
+        if let location = locationManager.location {
+            anchorage.widen(location)
+        }
+
         renderCircle()
     }
 
