@@ -141,6 +141,27 @@ class ViewController: UIViewController {
         updateUI()
     }
 
+    @IBAction func stopTapped(_ sender: Any) {
+        guard let anchorage = self.anchorage else { return }
+
+        let alertController = UIAlertController(
+            title: "Are you sure?",
+            message: "Do you want to turn off the anchor alarm and stop monitoring this anchorage?",
+            preferredStyle: .actionSheet
+        )
+
+        alertController.addAction(UIAlertAction(title: "Reset", style: .default) { _ in
+            self.anchorage?.reset()
+            self.updateUI()
+        })
+
+        alertController.addAction(UIAlertAction(title: "Stop", style: .destructive) { _ in
+            self.cancel(self)
+        })
+
+        present(alertController, animated: true)
+    }
+
     @IBAction func cancel(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
 

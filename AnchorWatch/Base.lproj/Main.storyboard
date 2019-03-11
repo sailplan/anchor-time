@@ -72,15 +72,15 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dr0-lH-WEv">
-                                <rect key="frame" x="0.0" y="488.5" width="375" height="198.5"/>
+                                <rect key="frame" x="0.0" y="489" width="375" height="198"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UAb-JQ-2hi">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="198.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
                                         <subviews>
                                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ce-Gf-O8l">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="198.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="kIh-jA-Ia4">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="198.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="left" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="XxL-2d-Hqt" userLabel="Anchor properties">
@@ -218,7 +218,7 @@
                                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                                     </userDefinedRuntimeAttributes>
                                                                     <connections>
-                                                                        <action selector="cancel:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MI6-cd-3rI"/>
+                                                                        <action selector="stopTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pnh-6C-aTG"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
