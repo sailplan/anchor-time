@@ -142,8 +142,6 @@ class ViewController: UIViewController {
     }
 
     @IBAction func stopTapped(_ sender: Any) {
-        guard let anchorage = self.anchorage else { return }
-
         let alertController = UIAlertController(
             title: "Are you sure?",
             message: "Do you want to turn off the anchor alarm and stop monitoring this anchorage?",
@@ -158,6 +156,8 @@ class ViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "Stop", style: .destructive) { _ in
             self.cancel(self)
         })
+
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
         present(alertController, animated: true)
     }
