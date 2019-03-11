@@ -222,12 +222,14 @@ class ViewController: UIViewController {
     func renderCircle() {
         guard let anchorage = self.anchorage else { return }
 
-        if (circle != nil) {
-            mapView.removeOverlay(circle!)
-        }
+        if !isResizing {
+            if (circle != nil) {
+                mapView.removeOverlay(circle!)
+            }
 
-        circle = anchorage.circle
-        mapView.addOverlay(circle!)
+            circle = anchorage.circle
+            mapView.addOverlay(circle!)
+        }
 
         anchorPositionLabel.text = FormatDisplay.coordinate(anchorage.coordinate)
         anchorageRadiusLabel.text = FormatDisplay.distance(radius)
