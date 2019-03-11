@@ -178,7 +178,7 @@ class ViewController: UIViewController {
         switch anchorage!.state {
         case .dragging:
             deliverNotification()
-            activateAlarm()
+            didExitAnchorage()
         default:
             print("Anchorage state changed", anchorage!.state)
             // no worries
@@ -215,7 +215,7 @@ class ViewController: UIViewController {
 
         // Only play alarm if battery is critically low.
         if (batteryLevel <= 0.1) {
-            activateAlarm()
+            alarm.start()
         }
     }
 
@@ -331,15 +331,22 @@ class ViewController: UIViewController {
         }
     }
 
-    func activateAlarm() {
+    func didExitAnchorage() {
         let alertController = UIAlertController(
-            title: "Anchor dragging",
-            message: nil,
-            preferredStyle: .alert
+            title: "Drag warning",
+            message: "Your anchor might be dragging.",
+            preferredStyle: .actionSheet
         )
 
-        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: "Reset", style: .default) { _ in
             self.alarm.stop()
+            self.anchorage?.reset()
+            self.updateUI()
+        })
+
+        alertController.addAction(UIAlertAction(title: "Stop", style: .destructive) { _ in
+            self.alarm.stop()
+            self.cancel(self)
         })
 
         present(alertController, animated: true)

@@ -106,6 +106,11 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         save()
     }
 
+    func reset() {
+        state = .dropped
+        save()
+    }
+
     /// Returns true if the given location is included in the anchorage
     func contains(_ location: CLLocation) -> Bool {
         return fence.contains(location.coordinate)
