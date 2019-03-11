@@ -287,18 +287,22 @@ class ViewController: UIViewController {
     //MARK: - App Logic
 
     func updateLocation(location: CLLocation) {
+        // Always update GPS accuracy
         gpsAccuracyLabel.text = "+/- \(FormatDisplay.distance(location.horizontalAccuracy))"
 
-        guard let anchorage = self.anchorage else { return }
+        // Ensure an anchorage is active and the location should be tracked
+        guard let anchorage = self.anchorage, let track = anchorage.track(location) else {
+            return
+        }
 
-        if let lastLocation = anchorage.locations.last {
-            let coordinates = [lastLocation.coordinate, location.coordinate]
+        // Draw the track from the previews location on the map
+        if track.previous != nil {
+            let coordinates = [track.previous!.coordinate, location.coordinate]
             mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
         }
 
         anchorBearingLabel.text = FormatDisplay.degrees(anchorage.bearingFrom(location.coordinate))
         anchorDistanceLabel.text = FormatDisplay.distance(anchorage.distanceTo(location))
-        anchorage.track(location)
 
         switch anchorage.state {
         case .dropped:
