@@ -112,6 +112,11 @@ class ViewController: UIViewController {
         addGestureRecognizer()
     }
 
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        print("Received memory warning")
+    }
+
     //MARK: - Actions
 
     @IBAction func dropAnchor(_ sender: Any) {
