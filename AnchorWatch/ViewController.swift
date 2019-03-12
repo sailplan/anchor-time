@@ -122,13 +122,15 @@ class ViewController: UIViewController {
     //MARK: - Actions
 
     @IBAction func dropAnchor(_ sender: Any) {
-        anchorage = Anchorage(coordinate: mapView.centerCoordinate)
-        print("Anchor dropped", anchorage!.coordinate)
+        let anchorage = Anchorage(coordinate: mapView.centerCoordinate)
 
         // Ensure anchorage includes current location to start
         if let location = locationManager.location {
-            anchorage!.widen(location)
+            anchorage.widen(location)
         }
+
+        print("Anchor dropped", anchorage)
+        self.anchorage = anchorage
 
         locationManager.startUpdatingLocation()
         renderAnchorage()
@@ -138,7 +140,7 @@ class ViewController: UIViewController {
     @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
-        print("Anchor set", anchorage.coordinate, radius)
+        print("Anchor set", anchorage)
 
         renderCircle()
         updateUI()
@@ -238,6 +240,9 @@ class ViewController: UIViewController {
     func updateUI(animated: Bool = true) {
         UIView.setAnimationsEnabled(animated)
 
+        var trackingMode: MKUserTrackingMode = .follow
+        var mapInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+
         if let anchorage = self.anchorage {
             dashboardConstraint.isActive = false
             dropAnchorButton.isHidden = true
@@ -247,21 +252,29 @@ class ViewController: UIViewController {
             cancelButton.isHidden = anchorage.state == .set
 
             // Stop following user's current location
-            mapView.setUserTrackingMode(MKUserTrackingMode.none, animated: true)
+            trackingMode = .none
 
-            scrollAnchorageIntoView()
+            // Inset map to account for overlayed dashboard
+            mapInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: dashboardView.bounds.height, right: 0.0)
         } else {
             dashboardConstraint.isActive = true
             dropAnchorButton.isHidden = false
-
-            // Start following user's current location
-            mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
+            trackingMode = .follow
         }
 
         self.isMapInteractive = anchorage == nil || anchorage?.state == .dropped
 
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.isResizing = true
             self.view.layoutIfNeeded()
+            self.mapView.layoutMargins = mapInsets
+            self.mapView.setUserTrackingMode(trackingMode, animated: false)
+        }) { (_) in
+            MKMapView.animate(withDuration: 0.2, animations: {
+                self.scrollAnchorageIntoView()
+            }, completion: { (_) in
+                self.isResizing = false
+            })
         }
 
         // Always re-enable animations
@@ -299,7 +312,6 @@ class ViewController: UIViewController {
         case .dropped:
             anchorage.widen(location)
             renderCircle()
-            scrollAnchorageIntoView()
         case .set:
             anchorage.check(location)
         case .dragging:
@@ -406,8 +418,9 @@ extension ViewController: CLLocationManagerDelegate {
 //MARK: - MapKit
 extension ViewController: MKMapViewDelegate {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        guard let anchorage = anchorage else { return }
+        guard let anchorage = anchorage, !isResizing else { return }
         anchorage.coordinate = mapView.centerCoordinate
+        print("Manually updated coordinate", anchorage)
 
         // Ensure anchorage includes current location
         if let location = locationManager.location {

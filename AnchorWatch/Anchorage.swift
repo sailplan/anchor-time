@@ -39,7 +39,11 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         let distance = (radius * 2) * 1.2
         return MKCoordinateRegion.init(center: coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
     }
-    
+
+    override var description: String {
+        return "<Anchorage: lat: \(coordinate.latitude), lon: \(coordinate.longitude), radius: \(radius), state: \(state)>"
+    }
+
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
         super.init()
