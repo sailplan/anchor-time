@@ -418,6 +418,10 @@ extension ViewController: CLLocationManagerDelegate {
 
 //MARK: - MapKit
 extension ViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        scrollAnchorageIntoView()
+    }
+
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         guard let anchorage = anchorage, !isResizing, !isAnimating else { return }
         anchorage.coordinate = mapView.centerCoordinate
