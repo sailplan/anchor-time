@@ -43,6 +43,7 @@ class ViewController: UIViewController {
             return anchorage?.state == .dropped
         }
     }
+    var isAnimating: Bool = false
 
     var isMapInteractive: Bool = false {
         didSet {
@@ -265,7 +266,7 @@ class ViewController: UIViewController {
         self.isMapInteractive = anchorage == nil || anchorage?.state == .dropped
 
         UIView.animate(withDuration: 0.2, animations: {
-            self.isResizing = true
+            self.isAnimating = true
             self.view.layoutIfNeeded()
             self.mapView.layoutMargins = mapInsets
             self.mapView.setUserTrackingMode(trackingMode, animated: false)
@@ -273,7 +274,7 @@ class ViewController: UIViewController {
             MKMapView.animate(withDuration: 0.2, animations: {
                 self.scrollAnchorageIntoView()
             }, completion: { (_) in
-                self.isResizing = false
+                self.isAnimating = false
             })
         }
 
@@ -418,7 +419,7 @@ extension ViewController: CLLocationManagerDelegate {
 //MARK: - MapKit
 extension ViewController: MKMapViewDelegate {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        guard let anchorage = anchorage, !isResizing else { return }
+        guard let anchorage = anchorage, !isResizing, !isAnimating else { return }
         anchorage.coordinate = mapView.centerCoordinate
         print("Manually updated coordinate", anchorage)
 
