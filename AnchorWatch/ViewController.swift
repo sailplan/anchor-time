@@ -165,6 +165,12 @@ class ViewController: UIViewController {
 
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
+        if let popover = alertController.popoverPresentationController {
+            popover.sourceView = self.view
+            popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+        }
+
         present(alertController, animated: true)
     }
 
@@ -352,6 +358,12 @@ class ViewController: UIViewController {
             self.alarm.stop()
             self.cancel(self)
         })
+
+        if let popover = alertController.popoverPresentationController {
+            popover.sourceView = self.view
+            popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+        }
 
         present(alertController, animated: true)
 
