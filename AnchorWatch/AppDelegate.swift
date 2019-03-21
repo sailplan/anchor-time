@@ -1,3 +1,4 @@
+import os.log
 import UIKit
 import CoreLocation
 import UserNotifications
@@ -17,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         notificationCenter.delegate = self
         notificationCenter.requestAuthorization(options: [.sound, .alert, .criticalAlert]) { success, error in
                 if let error = error {
-                    print("Error: \(error)")
+                    os_log("%@", log: .lifecycle, type: .error, error.localizedDescription)
                 }
         }
 
@@ -25,36 +26,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        print("App will resign to inactive state")
+        os_log("App will resign to inactive state", log: .lifecycle, type: .debug)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        print("App entered background state")
+        os_log("App entered background state", log: .lifecycle, type: .debug)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        print("App will enter foreground state")
+        os_log("App will enter foreground state", log: .lifecycle, type: .debug)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print("App entered active state")
+        os_log("App entered active state", log: .lifecycle, type: .debug)
         notificationCenter.removeAllPendingNotificationRequests()
         notificationCenter.removeAllDeliveredNotifications()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        print("App will terminate")
+        os_log("App will terminate", log: .lifecycle, type: .debug)
     }
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        print("App received memory warning")
+        os_log("App received memory warning", log: .lifecycle, type: .debug)
     }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler:
         @escaping () -> Void) {
-        print("Receiving notification in background", response.notification)
+        os_log("Receiving notification in background: %@", log: .lifecycle, type: .debug, response.notification)
 
         completionHandler()
     }
@@ -62,14 +63,15 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     // Receive local notification when app in foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
 
-        print("Receiving notification in foreground", notification)
+        os_log("Receiving notification in foreground", log: .lifecycle, type: .debug, notification)
         completionHandler([.alert, .sound]) // Display notification as regular alert and play sound
     }
 }
 
 extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        print("Location Manager - didChangeAuthorization", status)
+        let log = "Location Manager - didChangeAuthorization: \(status.rawValue)"
+        os_log("%@", log: .lifecycle, type: .debug, log)
 
         switch status {
         case .authorizedAlways:
@@ -96,14 +98,14 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location Manager  - didFailWithError:", error)
+        os_log("Location Manager  - didFailWithError", log: .lifecycle, type: .error, error.localizedDescription)
     }
 
     func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
-        print("Locastion Manager - didPauseLocationUpdates")
+        os_log("Locastion Manager - didPauseLocationUpdates", log: .lifecycle, type: .debug)
     }
     
     func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
-        print("Locastion Manager - didResumeLocationUpdates")
+        os_log("Locastion Manager - didResumeLocationUpdates", log: .lifecycle, type: .debug)
     }
 }

@@ -1,4 +1,5 @@
 
+import os.log
 import AVFoundation
 import MediaPlayer
 
@@ -15,14 +16,14 @@ class Alarm {
         do {
             try audioSession.setCategory(.playback, mode: .default, options: [.duckOthers])
         } catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed", error.localizedDescription)
+            os_log("Setting category to AVAudioSessionCategoryPlayback failed", log: .app, type: .error, error.localizedDescription)
         }
 
         let fileURL = Bundle.main.path(forResource: "alarm", ofType: "mp3")
         do {
             player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: fileURL!))
         } catch let error {
-            print("Can't play the audio file failed with an error \(error.localizedDescription)")
+            os_log("Can't play the audio file failed with an error", log: .app, type: .error, error.localizedDescription)
         }
         player?.numberOfLoops = -1
     }
@@ -35,7 +36,7 @@ class Alarm {
         do {
             try audioSession.setActive(true, options: [])
         } catch {
-            print("Failed to activate audio session", error.localizedDescription)
+            os_log("Failed to activate audio session", log: .app, type: .error, error.localizedDescription)
         }
 
         player?.play()
@@ -48,7 +49,7 @@ class Alarm {
     func stop() {
         guard isActive else { return }
 
-        print("Stopping alarm")
+        os_log("Stopping alarm", log: .app, type: .default)
 
         stopVibrating()
         player?.stop()
@@ -56,7 +57,7 @@ class Alarm {
         do {
             try audioSession.setActive(false, options: [])
         } catch {
-            print("Failed to deactivate audio session", error.localizedDescription)
+            os_log("Failed to deactivate audio session", log: .app, type: .error, error.localizedDescription)
         }
 
         isActive = false
@@ -67,10 +68,8 @@ class Alarm {
         // Note: that this only works if the volume is turned below 1.0. Otherwise, setting the volume to 1.0 when
         // starting the alarm wil also trigger this volume press.
         if let volume = notification.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? Float {
-            print("output volume", volume, audioSession.outputVolume, notification)
-
             if isActive && volume < 1.0 {
-                print("Stopping alarm with volume button")
+                os_log("Stopping alarm with volume button", log: .app, type: .default)
                 self.stop()
             }
         }

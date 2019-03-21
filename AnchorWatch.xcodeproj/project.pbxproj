@@ -10,6 +10,7 @@
 		7E1BB0242236BDF100082522 /* SouthWaterCaye.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7E1BB0232236BDF100082522 /* SouthWaterCaye.gpx */; };
 		7E1BB0262236E54700082522 /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1BB0252236E54700082522 /* BatteryMonitor.swift */; };
 		7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3BED15210EB5900069EE88 /* Anchorage.swift */; };
+		7E4721352243F8E8004DF714 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4721342243F8E8004DF714 /* OSLog.swift */; };
 		7E53071521BBAC5600C2EDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */; };
 		7E64C58421C15F7900735B73 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64C58321C15F7900735B73 /* Notification.swift */; };
 		7E68E0B02112240600B44FFE /* LakeCharlevoix.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */; };
@@ -51,6 +52,7 @@
 		7E1BB0232236BDF100082522 /* SouthWaterCaye.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SouthWaterCaye.gpx; sourceTree = "<group>"; };
 		7E1BB0252236E54700082522 /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
 		7E3BED15210EB5900069EE88 /* Anchorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
+		7E4721342243F8E8004DF714 /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
 		7E53071421BBAC5600C2EDF4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		7E64C58321C15F7900735B73 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		7E68E0AF2112240600B44FFE /* LakeCharlevoix.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = LakeCharlevoix.gpx; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				7E64C58321C15F7900735B73 /* Notification.swift */,
 				7EA86C9821DBF4D100D51CF4 /* FormatDisplay.swift */,
 				7EA86C9A21DC66A100D51CF4 /* MPVolumeView+Extension.swift */,
+				7E4721342243F8E8004DF714 /* OSLog.swift */,
 			);
 			path = AnchorWatch;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				7EB6AB73210DF3D700C97117 /* ViewController.swift in Sources */,
 				7E3BED16210EB5900069EE88 /* Anchorage.swift in Sources */,
 				7EB737C12226C6E300E7D1F0 /* GeofenceGestureRecognizer.swift in Sources */,
+				7E4721352243F8E8004DF714 /* OSLog.swift in Sources */,
 				7EA86C9921DBF4D100D51CF4 /* FormatDisplay.swift in Sources */,
 				7EB6AB71210DF3D700C97117 /* AppDelegate.swift in Sources */,
 				7EB737BD22265F5D00E7D1F0 /* Alarm.swift in Sources */,

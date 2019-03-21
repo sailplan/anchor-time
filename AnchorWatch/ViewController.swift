@@ -1,3 +1,4 @@
+import os.log
 import UIKit
 import MapKit
 import UserNotifications
@@ -26,7 +27,7 @@ class ViewController: UIViewController {
         }
 
         set {
-            print("Changed anchorage radius to", radius)
+            os_log("Changed anchorage radius to %{PUBLIC}@", log: .app, type: .info, radius.description)
             anchorage?.radius = newValue
             scrollAnchorageIntoView()
         }
@@ -117,7 +118,7 @@ class ViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        print("Received memory warning")
+        os_log("Received memory warning", log: .lifecycle, type: .default)
     }
 
     //MARK: - Actions
@@ -130,7 +131,7 @@ class ViewController: UIViewController {
             anchorage.widen(location)
         }
 
-        print("Anchor dropped", anchorage)
+        os_log("Anchor dropped: %{PUBLIC}@", log: .app, type: .default, anchorage.description)
         self.anchorage = anchorage
 
         locationManager.startUpdatingLocation()
@@ -141,7 +142,7 @@ class ViewController: UIViewController {
     @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
-        print("Anchor set", anchorage)
+        os_log("Anchor set: %{PUBLIC}", log: .app, type: .default, anchorage.description)
 
         renderCircle()
         updateUI()
@@ -212,7 +213,7 @@ class ViewController: UIViewController {
             deliverNotification()
             didExitAnchorage()
         default:
-            print("Anchorage state changed", anchorage!.state)
+            os_log("Anchorage state changed: %{PUBLIC}@", log: .app, type: .debug, anchorage!.description)
             // no worries
         }
     }
@@ -336,7 +337,7 @@ class ViewController: UIViewController {
 
         notificationCenter.add(request) { error in
             if let error = error {
-                print("Error: \(error)")
+                os_log("%@", log: .app, type: .error, error.localizedDescription)
             }
         }
     }
@@ -437,7 +438,7 @@ extension ViewController: MKMapViewDelegate {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         guard let anchorage = anchorage, !isResizing, !isAnimating else { return }
         anchorage.coordinate = mapView.centerCoordinate
-        print("Manually updated coordinate", anchorage)
+        os_log("Manually updated coordinate: %{PUBLIC}@", log: .app, type: .default, anchorage.description)
 
         // Ensure anchorage includes current location
         if let location = locationManager.location {
@@ -494,7 +495,7 @@ extension ViewController: BatteryMonitorDelegate {
     }
 
     func batteryLow(level: Float) {
-        print("Battery low", level)
+        os_log("Battery low: %{PUBLIC}@", log: .app, type: .default, level.description)
 
         let content = UNMutableNotificationContent()
         content.title = "Low battery!"

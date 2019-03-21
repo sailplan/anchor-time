@@ -1,3 +1,4 @@
+import os.log
 import MapKit
 
 class Anchorage: NSObject, NSCoding, MKAnnotation {
@@ -9,7 +10,8 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     var state: State = .dropped {
         didSet(oldValue) {
-            print("Changing anchorage state", oldValue, self.state)
+            let log = "Changing anchorage state from \(oldValue) to \(self.state)"
+            os_log("%@", log: .app, type: .debug, log)
             NotificationCenter.default.post(name: .didChangeState, object: self)
         }
     }
@@ -67,11 +69,11 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         let previous = self.locations.last
 
         if(location.horizontalAccuracy > 10) {
-            print("Horrizontal accuracy is not precise enough, ignoring", location)
+            os_log("Horrizontal accuracy is not precise enough, ignoring", log: .app, type: .debug)
         } else if(location.timestamp.timeIntervalSinceNow > 10) {
-            print("Ignoring old location", location)
+            os_log("Ignoring old location", log: .app, type: .debug)
         } else if let distance = previous?.distance(from: location), distance <= location.horizontalAccuracy * 0.25 {
-            print("New location is not significant enough to track.", (distance: distance, accuracy: location.horizontalAccuracy))
+            os_log("New location is not significant enough to track", log: .app, type: .debug)
         } else {
             self.locations.append(location)
             return (previous: previous, new: location)
