@@ -7,4 +7,5 @@ extension OSLog {
     /// Logs lifecycle eventsx like viewDidLoad.
     static let app = OSLog(subsystem: subsystem, category: "app")
     static let lifecycle = OSLog(subsystem: subsystem, category: "lifecycle")
+    static let location = OSLog(subsystem: subsystem, category: "location")
 }

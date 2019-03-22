@@ -71,7 +71,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         let log = "Location Manager - didChangeAuthorization: \(status.rawValue)"
-        os_log("%@", log: .lifecycle, type: .debug, log)
+        os_log("%@", log: .location, type: .debug, log)
 
         switch status {
         case .authorizedAlways:
@@ -98,14 +98,14 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        os_log("Location Manager  - didFailWithError", log: .lifecycle, type: .error, error.localizedDescription)
+        os_log("Location Manager  - didFailWithError", log: .location, type: .error, error.localizedDescription)
     }
 
     func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
-        os_log("Locastion Manager - didPauseLocationUpdates", log: .lifecycle, type: .debug)
+        os_log("Location Manager - didPauseLocationUpdates", log: .location, type: .debug)
     }
     
     func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
-        os_log("Locastion Manager - didResumeLocationUpdates", log: .lifecycle, type: .debug)
+        os_log("Location Manager - didResumeLocationUpdates", log: .location, type: .debug)
     }
 }

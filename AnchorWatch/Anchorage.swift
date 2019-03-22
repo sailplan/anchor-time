@@ -69,11 +69,11 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
         let previous = self.locations.last
 
         if(location.horizontalAccuracy > 10) {
-            os_log("Horrizontal accuracy is not precise enough, ignoring", log: .app, type: .debug)
+            os_log("Horrizontal accuracy is not precise enough, ignoring", log: .location, type: .debug)
         } else if(location.timestamp.timeIntervalSinceNow > 10) {
-            os_log("Ignoring old location", log: .app, type: .debug)
+            os_log("Ignoring old location", log: .location, type: .debug)
         } else if let distance = previous?.distance(from: location), distance <= location.horizontalAccuracy * 0.25 {
-            os_log("New location is not significant enough to track", log: .app, type: .debug)
+            os_log("New location is not significant enough to track", log: .location, type: .debug)
         } else {
             self.locations.append(location)
             return (previous: previous, new: location)
@@ -143,8 +143,12 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
 
     /// Persist the current anchorage
     func save() {
-        let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "anchorage")
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+            UserDefaults.standard.set(data, forKey: "anchorage")
+        } catch {
+            os_log("Failed to save anchorage: $@", log: .app, type: .error, error.localizedDescription)
+        }
     }
 
     /// Clear any saved anchorage
@@ -155,7 +159,13 @@ class Anchorage: NSObject, NSCoding, MKAnnotation {
     /// Load the saved anchorage
     class func load() -> Anchorage? {
         guard let data = UserDefaults.standard.data(forKey: "anchorage") else { return nil }
-        guard let anchorage = NSKeyedUnarchiver.unarchiveObject(with: data) as? Anchorage else { return nil }
-        return anchorage
+
+        do {
+            let anchorage = try NSKeyedUnarchiver.unarchivedObject(ofClass: Anchorage.self, from: data)
+            return anchorage
+        } catch {
+            os_log("Failed to load anchorage: %@", log: .app, type: .error, error.localizedDescription)
+            return nil
+        }
     }
 }
