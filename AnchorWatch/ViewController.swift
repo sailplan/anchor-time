@@ -131,7 +131,7 @@ class ViewController: UIViewController {
             anchorage.widen(location)
         }
 
-        os_log("Anchor dropped: %{PUBLIC}@", log: .app, type: .default, anchorage.description)
+        os_log("Anchor dropped: %{PUBLIC}@", log: .app, type: .info, anchorage.description)
         self.anchorage = anchorage
 
         locationManager.startUpdatingLocation()
@@ -142,7 +142,7 @@ class ViewController: UIViewController {
     @IBAction func setAnchor(_ sender: Any) {
         guard let anchorage = self.anchorage else { return }
         anchorage.set()
-        os_log("Anchor set: %{PUBLIC}", log: .app, type: .default, anchorage.description)
+        os_log("Anchor set: %{PUBLIC}@", log: .app, type: .info, anchorage.description)
 
         renderCircle()
         updateUI()
@@ -438,7 +438,7 @@ extension ViewController: MKMapViewDelegate {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         guard let anchorage = anchorage, !isResizing, !isAnimating else { return }
         anchorage.coordinate = mapView.centerCoordinate
-        os_log("Manually updated coordinate: %{PUBLIC}@", log: .app, type: .default, anchorage.description)
+        os_log("Manually updated coordinate: %{PUBLIC}@", log: .app, type: .info, anchorage.description)
 
         // Ensure anchorage includes current location
         if let location = locationManager.location {
@@ -495,7 +495,7 @@ extension ViewController: BatteryMonitorDelegate {
     }
 
     func batteryLow(level: Float) {
-        os_log("Battery low: %{PUBLIC}@", log: .app, type: .default, level.description)
+        os_log("Battery low: %{PUBLIC}@", log: .app, type: .info, level.description)
 
         let content = UNMutableNotificationContent()
         content.title = "Low battery!"

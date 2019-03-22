@@ -49,7 +49,7 @@ class Alarm {
     func stop() {
         guard isActive else { return }
 
-        os_log("Stopping alarm", log: .app, type: .default)
+        os_log("Stopping alarm", log: .app, type: .info)
 
         stopVibrating()
         player?.stop()
@@ -69,7 +69,7 @@ class Alarm {
         // starting the alarm wil also trigger this volume press.
         if let volume = notification.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? Float {
             if isActive && volume < 1.0 {
-                os_log("Stopping alarm with volume button", log: .app, type: .default)
+                os_log("Stopping alarm with volume button", log: .app, type: .info)
                 self.stop()
             }
         }
